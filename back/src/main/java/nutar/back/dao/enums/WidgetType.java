@@ -1,0 +1,6 @@
+package nutar.back.dao.enums;
+
+public enum WidgetType {
+    JIRA_TASKS, GITHUB_PULL_REQUESTS, CI_BUILD_STATUS,
+    SLACK_MESSAGES, GITHUB_NOTIFICATIONS, TEAM_ACTIVITY
+}
