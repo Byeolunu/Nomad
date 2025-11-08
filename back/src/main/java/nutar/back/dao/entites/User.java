@@ -1,8 +1,10 @@
 package nutar.back.dao.entites;
 
 import jakarta.persistence.*;
+import nutar.back.dao.enums.UserRole;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
