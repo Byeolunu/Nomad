@@ -1,17 +1,28 @@
 package nutar.back.dao.entites;
 
 import jakarta.persistence.*;
-import nutar.back.dao.enums.UserRole;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class User {
+public abstract class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -19,26 +30,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String firstName;
-    private String lastName;
+    private String phoneNumber;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    private String timezone; // Pour les rappels planifiés
-    private String avatarUrl;
+    private Boolean isActive = true;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role; // ADMIN, USER, etc.
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlatformConnection> platformConnections;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<DashboardConfig> dashboardConfigs;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public User() {
+        this.createdAt = LocalDateTime.now();
     }
 }
