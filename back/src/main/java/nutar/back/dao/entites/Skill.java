@@ -28,7 +28,6 @@ public class Skill {
     @Enumerated(EnumType.STRING)
     private SkillCategory category;
 
-
     @ManyToMany(mappedBy = "skills")
     private Set<Freelancer> freelancers = new HashSet<>();
 
