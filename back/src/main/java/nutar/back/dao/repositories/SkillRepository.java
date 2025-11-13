@@ -8,7 +8,9 @@ import java.util.Optional;
 import nutar.back.dao.enums.SkillCategory;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 
 public interface SkillRepository extends JpaRepository<Skill, Long> {
     Optional<Skill> findByName(String name);
@@ -17,4 +19,4 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
 
     @Query("SELECT s FROM Skill s JOIN s.freelancers f WHERE f.id = :freelancerId")
     List<Skill> findByFreelancerId(@Param("freelancerId") Long freelancerId);
-}
+} 

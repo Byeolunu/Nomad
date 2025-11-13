@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 import nutar.back.dao.enums.ExperienceLevel;
+import org.springframework.stereotype.Repository;
 
+@Repository
 
 public interface ProfileRepository extends JpaRepository<Profile, Long>
 {
