@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 
 public interface RecruiterRepository extends JpaRepository<Recruiter, Long> {
-    List<Recruiter> findByEmail(String email);
     List<Recruiter> findByCompanyNameContainingIgnoreCase(String companyName);
 
 }

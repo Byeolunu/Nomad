@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ProfileRepository extends JpaRepository<Profile, Long>
 {
     Optional<Profile> findByFreelancerId(Long freelancerId);
-    List<Profile> findBySkillsContainingIgnoreCase(String skill);
+    List<Profile> findBySkills_NameContainingIgnoreCase(String skill);
     List<Profile> findByExperienceLevel(ExperienceLevel experienceLevel);
     List<Profile> findByLocationContainingIgnoreCase(String location);
 }

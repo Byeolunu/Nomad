@@ -1,4 +1,5 @@
 package nutar.back.dao.entites;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import nutar.back.dao.enums.MissionStatus;
 import nutar.back.dao.enums.MissionType;
 
@@ -33,15 +34,16 @@ public class Mission {
     @Enumerated(EnumType.STRING)
     private MissionStatus status = MissionStatus.OPEN;
 
-    private Double proposedBudget;
+    private Double budget;
     private LocalDateTime createdAt;
     private LocalDateTime deadline;
 
     @Enumerated(EnumType.STRING)
-    private MissionType type; // HOURLY, FIXED
+    private MissionType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiter_id")
+    @JsonManagedReference
     private Recruiter recruiter;
 
 

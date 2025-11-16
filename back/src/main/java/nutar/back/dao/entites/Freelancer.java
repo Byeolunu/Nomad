@@ -26,4 +26,7 @@ public class Freelancer extends User {
     @OneToMany(mappedBy = "freelancer")
     private List<Application> applications = new ArrayList<>();
 
+    @ManyToMany
+    private List<Skill> skills;
+
 }

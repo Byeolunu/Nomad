@@ -10,8 +10,7 @@ import java.util.Optional;
 
 public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
 
-    Optional<Freelancer> findByEmail(String email);
-    List<Freelancer> findByProfileSkillsContainingIgnoreCase(String skill);
+    List<Freelancer> findBySkills_NameContainingIgnoreCase(String skill);
     List<Freelancer> findByTitleContainingIgnoreCase(String keyword);
 
     List<Freelancer> findByHourlyRateBetween(Double minRate, Double maxRate);

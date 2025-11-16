@@ -1,5 +1,7 @@
 package nutar.back.dao.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +21,7 @@ public class Recruiter extends User
     private String companyWebsite;
 
     @OneToMany(mappedBy = "recruiter", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Mission> postedMissions = new ArrayList<>();
 
 }
