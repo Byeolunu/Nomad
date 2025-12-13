@@ -3,6 +3,8 @@ package nutar.back.web;
 import nutar.back.dao.entites.Application;
 import nutar.back.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import nutar.back.security.RequireFreelancer;
+import nutar.back.security.RequireRecruiter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,24 +19,28 @@ public class ApplicationController {
     private ApplicationService applicationService;
 
     @PostMapping("/apply")
+    @RequireFreelancer
     public ResponseEntity<Application> applyToMission(@RequestBody Application application) {
         Application savedApplication = applicationService.applyToMission(application);
         return ResponseEntity.ok(savedApplication);
     }
 
     @GetMapping("/mission/{missionId}")
+    @RequireRecruiter
     public ResponseEntity<List<Application>> getApplicationsForMission(@PathVariable Long missionId) {
         List<Application> applications = applicationService.getApplicationsForMission(missionId);
         return ResponseEntity.ok(applications);
     }
 
     @GetMapping("/freelancer/{freelancerId}")
+    @RequireFreelancer
     public ResponseEntity<List<Application>> getFreelancerApplications(@PathVariable Long freelancerId) {
         List<Application> applications = applicationService.getFreelancerApplications(freelancerId);
         return ResponseEntity.ok(applications);
     }
 
     @PutMapping("/{applicationId}/status")
+    @RequireRecruiter
     public ResponseEntity<Application> updateApplicationStatus(@PathVariable Long applicationId, @RequestBody String status) {
         Application updatedApplication = applicationService.updateApplicationStatus(applicationId, status);
         return ResponseEntity.ok(updatedApplication);

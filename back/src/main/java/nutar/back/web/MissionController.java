@@ -5,6 +5,7 @@ import nutar.back.dao.entites.Recruiter;
 import nutar.back.service.MissionService;
 import nutar.back.service.RecruiterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import nutar.back.security.RequireRecruiter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class MissionController {
     }
 
     @PostMapping
+    @RequireRecruiter
     public ResponseEntity<Mission> createMission(@RequestBody Mission mission , Recruiter recruiter) {
         Mission createdMission = missionService.createMission(mission,recruiter.getId());
         return ResponseEntity.ok(createdMission);
