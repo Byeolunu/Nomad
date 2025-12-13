@@ -1,0 +1,16 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form (ngSubmit)="submit()">
+    <label>Email</label>
+    <input type="email" [(ngModel)]="email" name="email" required />
+
+    <label>Password</label>
+    <input type="password" [(ngModel)]="password" name="password" required />
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Logging in...' : 'Login' }}</button>
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </form>
+  <p>
+    No account? <a href="/register">Register</a>
+  </p>
+</div>

@@ -1,0 +1,53 @@
+<div class="register-container">
+  <h2>Register</h2>
+
+  <label>Role</label>
+  <select [(ngModel)]="role" name="role">
+    <option value="freelancer">Freelancer</option>
+    <option value="recruiter">Recruiter</option>
+  </select>
+
+  <form (ngSubmit)="submit()">
+    <label>First Name</label>
+    <input [(ngModel)]="firstName" name="firstName" required />
+
+    <label>Last Name</label>
+    <input [(ngModel)]="lastName" name="lastName" required />
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="email" name="email" required />
+
+    <label>Username</label>
+    <input [(ngModel)]="username" name="username" required />
+
+    <label>Password</label>
+    <input type="password" [(ngModel)]="password" name="password" required />
+
+    <label>Phone</label>
+    <input [(ngModel)]="phoneNumber" name="phoneNumber" />
+
+    <div *ngIf="role === 'freelancer'">
+      <label>Title</label>
+      <input [(ngModel)]="title" name="title" />
+      <label>Summary</label>
+      <textarea [(ngModel)]="summary" name="summary"></textarea>
+      <label>Hourly Rate</label>
+      <input type="number" [(ngModel)]="hourlyRate" name="hourlyRate" />
+    </div>
+
+    <div *ngIf="role === 'recruiter'">
+      <label>Company Name</label>
+      <input [(ngModel)]="companyName" name="companyName" />
+      <label>Company Website</label>
+      <input [(ngModel)]="companyWebsite" name="companyWebsite" />
+    </div>
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Submitting...' : 'Register' }}</button>
+    <p class="success" *ngIf="success">{{ success }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </form>
+
+  <p>
+    Already have an account? <a href="/login">Login</a>
+  </p>
+</div>
