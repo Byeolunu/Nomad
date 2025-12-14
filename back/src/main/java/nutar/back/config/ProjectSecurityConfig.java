@@ -64,24 +64,21 @@ public class ProjectSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-
+                        .requestMatchers("OPTIONS", "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/missions").permitAll()
-                        .requestMatchers("/api/missions/*").permitAll()
-                        .requestMatchers("/api/profiles/").permitAll()
-                        .requestMatchers("/api/users").permitAll()
-                         .requestMatchers("/h2-console/**").permitAll()
-                         .anyRequest().authenticated()
-
+                        .requestMatchers("/api/missions/**").permitAll()
+                        .requestMatchers("/api/profiles/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.disable())
-                .httpBasic(basic -> basic.disable()) // disable for JWT
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // add JWT filter here
+                .httpBasic(basic -> basic.disable())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
-        ;
 
         return http.build();
     }

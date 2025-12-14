@@ -39,27 +39,36 @@ public class AuthController {
 
 
     @PostMapping("/register/freelancer")
-    public ResponseEntity<?> registerFreelancer(@RequestBody Freelancer freelancer)
+    public ResponseEntity<?> registerFreelancer(@RequestBody SignupRequest request)
     {
-        if (userRepository.existsByEmail(freelancer.getEmail()))
+        if (userRepository.existsByEmail(request.getEmail()))
         {
             return ResponseEntity.badRequest().body("Email already exists");
         }
-
-        freelancer.setPassword(passwordEncoder.encode(freelancer.getPassword()));
+        Freelancer freelancer = new Freelancer();
+        freelancer.setEmail(request.getEmail());
+        freelancer.setPassword(passwordEncoder.encode(request.getPassword()));
+        freelancer.setUsername(request.getEmail());
+        freelancer.setFirstName("User");
+        freelancer.setLastName("Freelancer");
         freelancer.setRole(Role.FREELANCER);
         Freelancer savedFreelancer = userRepository.save(freelancer);
         return ResponseEntity.ok(savedFreelancer);
     }
 
+
     @PostMapping("/register/recruiter")
-    public ResponseEntity<?> registerRecruiter(@RequestBody Recruiter recruiter) {
-        if (userRepository.existsByEmail(recruiter.getEmail())) {
+    public ResponseEntity<?> registerRecruiter(@RequestBody SignupRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
 
-
-        recruiter.setPassword(passwordEncoder.encode(recruiter.getPassword()));
+        Recruiter recruiter = new Recruiter();
+        recruiter.setEmail(request.getEmail());
+        recruiter.setPassword(passwordEncoder.encode(request.getPassword()));
+        recruiter.setUsername(request.getEmail());
+        recruiter.setFirstName("User");
+        recruiter.setLastName("Recruiter");
         recruiter.setRole(Role.RECRUITER);
         Recruiter savedRecruiter = userRepository.save(recruiter);
         return ResponseEntity.ok(savedRecruiter);
@@ -67,29 +76,16 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-//        try
-//        {
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-//            System.out.println("Looking for this user");
-//            final var userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-//            System.out.println("Found him " + userDetails.getUsername());
-//            final String token = jwtUtils.generateToken(userDetails);
-//            return ResponseEntity.ok(new AuthResponse(token));
-//        }
-//
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//            System.out.println(e);
+    public ResponseEntity<?> login(@RequestBody AuthRequest request)
+    {
         System.out.println("=== LOGIN ATTEMPT ===");
         System.out.println("Email: " + request.getEmail());
 
-        try {
+        try
+        {
             System.out.println("Attempting authentication manager...");
             var authToken = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
             var authentication = authenticationManager.authenticate(authToken);
-
             System.out.println("Authentication SUCCESSFUL!");
             System.out.println("Authenticated: " + authentication.isAuthenticated());
             System.out.println("Principal: " + authentication.getPrincipal());
@@ -101,8 +97,9 @@ public class AuthController {
                     .map(auth -> auth.getAuthority())
                     .orElse("FREELANCER");
             return ResponseEntity.ok(new AuthResponse(token,role));
-
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println("=== AUTHENTICATION FAILED ===");
             System.out.println("Exception type: " + e.getClass().getName());
             System.out.println("Exception message: " + e.getMessage());
@@ -119,10 +116,11 @@ public class AuthController {
                     debugMsg = "User not found with email: " + request.getEmail();
                     System.out.println(debugMsg);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 ex.printStackTrace();
             }
-
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(debugMsg);
         }
     }
@@ -141,5 +139,13 @@ public class AuthController {
         private final String token;
         private final String role;
         public AuthResponse(String token,String role) { this.token = token; this.role = role; }
+    }
+
+    @Setter
+    @Getter
+    public static class SignupRequest {
+        private String email;
+        private String password;
+        private String role;
     }
 }

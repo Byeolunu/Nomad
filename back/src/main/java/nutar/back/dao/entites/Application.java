@@ -3,7 +3,6 @@ import lombok.Getter;
 import lombok.Setter;
 import nutar.back.dao.enums.ApplicationStatus;
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
