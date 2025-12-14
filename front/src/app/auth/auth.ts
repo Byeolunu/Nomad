@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8090/api/auth'; // your backend URL
+  private apiUrl = 'http://localhost:8090/api/auth'; 
 
   constructor(private http: HttpClient) {}
 
@@ -21,7 +21,8 @@ export class AuthService {
   }
 
   signup(email: string, password: string, role: string) {
-    return this.http.post(`${this.apiUrl}/register`, { email, password, role });
+    const endpoint = role === 'RECRUITER' ? 'register/recruiter' : 'register/freelancer';
+    return this.http.post(`${this.apiUrl}/${endpoint}`, { email, password, role });
   }
 
   logout() {

@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
+  standalone: true,
   templateUrl: './signup.html',
   imports: [
     FormsModule
@@ -13,18 +14,24 @@ import {FormsModule} from '@angular/forms';
 export class SignupComponent {
   email = '';
   password = '';
-  role = 'ROLE_USER';
+  role = 'FREELANCER';
   message = '';
+  successMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onSignup() {
+    console.log('Attempting signup:', this.email, this.role);
     this.authService.signup(this.email, this.password, this.role).subscribe({
-      next: () => {
-        this.message = 'Signup successful! You can login now.';
-        this.router.navigate(['/login']);
+      next: (response) => {
+        this.successMessage='Signup successful! You can login now.';
+        console.log('Signup successful:', response);
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
-      error: () => this.message = 'Signup failed.'
+      error: (err) => {
+        console.error('Signup error:', err);
+        this.message = 'Signup failed: ' + (err.error || err.message);
+      }
     });
   }
 }

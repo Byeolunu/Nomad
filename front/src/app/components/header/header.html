@@ -2,15 +2,16 @@
   <div class="text-2xl font-mono font-bold">DevFlow</div>
 
   <nav class="space-x-6 hidden md:flex">
-    <a href="#" class="hover:text-pink-600">Acceuil</a>
-    <a href="#" class="hover:text-pink-600">Missions</a>
-    <a href="#" class="hover:text-pink-600">Profile</a>
+    <a routerLink="/" class="hover:text-pink-600">Acceuil</a>
+    <a routerLink="/missions" class="hover:text-pink-600">Missions</a>
+    <a routerLink="/profile" class="hover:text-pink-600">Profile</a>
   </nav>
 
   <div class="space-x-4">
-    <button class="text-white hover:text-pink-600">Sign In</button>
-    <button class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md">
+    <!-- Use routerLink for Angular routing -->
+    <a routerLink="/login" class="text-white hover:text-pink-600 cursor-pointer">Sign In</a>
+    <a routerLink="/signup" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md cursor-pointer">
       Register
-    </button>
+    </a>
   </div>
 </header>
