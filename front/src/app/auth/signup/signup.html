@@ -1,0 +1,17 @@
+<h2>Signup</h2>
+<form (ngSubmit)="onSignup()">
+  <label>Email:</label>
+  <input type="email" [(ngModel)]="email" name="email" required />
+
+  <label>Password:</label>
+  <input type="password" [(ngModel)]="password" name="password" required />
+
+  <label>Role:</label>
+  <select [(ngModel)]="role" name="role">
+    <option value="ROLE_USER">User</option>
+    <option value="ROLE_ADMIN">Admin</option>
+  </select>
+
+  <button type="submit">Sign Up</button>
+</form>
+<p [@if]="message">{{ message }}</p>
