@@ -1,6 +1,4 @@
 package nutar.back.dao.enums;
-
-
 public enum SkillCategory
 {
     PROGRAMMING("Programming & Development"),
@@ -19,13 +17,10 @@ public enum SkillCategory
     GAME_DEV("Game Development"),
     BLOCKCHAIN("Blockchain"),
     AI_ML("AI & Machine Learning");
-
     private final String displayName;
-
     SkillCategory(String displayName) {
         this.displayName = displayName;
     }
-
     public String getDisplayName() {
         return displayName;
     }

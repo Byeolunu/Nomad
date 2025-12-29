@@ -1,0 +1,194 @@
+@if (mission) {
+  <div class="mission-detail-page">
+    <div class="detail-container">
+      <button class="back-btn font-maglite" (click)="goBack()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Missions
+      </button>
+      <div class="detail-layout">
+        <main class="detail-main">
+          <div class="detail-card">
+            <div class="detail-header">
+              <div class="company-logo-lg">
+                <span class="font-maglite">{{ mission.companyLogo }}</span>
+              </div>
+              <div class="header-info">
+                <h1 class="detail-title font-maglite">{{ mission.title }}</h1>
+                <p class="detail-company font-hermione">{{ mission.company }}</p>
+                <span class="category-badge-lg font-hermione">{{ mission.category }}</span>
+              </div>
+            </div>
+            <div class="detail-body">
+              <div class="detail-section">
+                <h2 class="section-title font-maglite">Mission Description</h2>
+                <p class="description-text font-hermione">{{ mission.description }}</p>
+              </div>
+              <div class="detail-section">
+                <h3 class="section-title font-maglite">Required Skills</h3>
+                <div class="skills-list">
+                  @for (skill of mission.skills; track skill) {
+                    <span class="skill-item font-hermione">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      {{ skill }}
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-icon info-icon-burgundy">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">
+                    <p class="info-label font-hermione">Budget</p>
+                    <p class="info-value font-maglite">{{ mission.budget }}</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <div class="info-icon info-icon-violet">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">
+                    <p class="info-label font-hermione">Location</p>
+                    <p class="info-value font-maglite">{{ mission.location }}</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <div class="info-icon info-icon-green">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">
+                    <p class="info-label font-hermione">Experience Level</p>
+                    <p class="info-value font-maglite">{{ mission.experienceLevel }}</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <div class="info-icon info-icon-cardinal">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">
+                    <p class="info-label font-hermione">Posted</p>
+                    <p class="info-value font-maglite">{{ mission.postedDate }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          @if (similarMissions.length > 0) {
+            <div class="similar-card">
+              <h3 class="similar-title font-maglite">Similar Missions</h3>
+              <div class="similar-list">
+                @for (similar of similarMissions; track similar.id) {
+                  <div class="similar-item" (click)="navigateToMission(similar.id)">
+                    <h4 class="similar-item-title font-maglite">{{ similar.title }}</h4>
+                    <p class="similar-item-company font-hermione">{{ similar.company }}</p>
+                    <p class="similar-item-budget font-hermione">{{ similar.budget }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </main>
+        <aside class="detail-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-section">
+              <div class="applicants-info">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span class="font-hermione">{{ mission.applicants }} freelancers have applied</span>
+              </div>
+              <button class="apply-btn font-maglite" (click)="applyForMission()">
+                @if (isLoggedIn && isFreelancer) {
+                  Apply Now
+                } @else {
+                  Apply for this Mission
+                }
+              </button>
+              @if (isLoggedIn && isFreelancer) {
+                <p class="apply-note font-hermione">Submit your proposal to this mission</p>
+              } @else {
+                <p class="apply-note font-hermione">Sign up to submit your proposal</p>
+              }
+            </div>
+            <div class="sidebar-section">
+              <h4 class="sidebar-section-title font-maglite">About the Client</h4>
+              <div class="client-info">
+                <div class="client-logo">
+                  <span class="font-maglite">{{ mission.companyLogo }}</span>
+                </div>
+                <div class="client-text">
+                  <p class="client-name font-maglite">{{ mission.company }}</p>
+                  <p class="client-location font-hermione">{{ mission.location }}</p>
+                </div>
+              </div>
+              <button class="profile-btn font-maglite" (click)="navigateToCompanyProfile()">
+                View Company Profile
+              </button>
+            </div>
+            <div class="sidebar-section">
+              <h4 class="sidebar-section-title font-maglite">Mission Stats</h4>
+              <div class="stats-list">
+                <div class="stat-item">
+                  <span class="stat-label font-hermione">Applications</span>
+                  <span class="stat-value font-maglite">{{ mission.applicants }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label font-hermione">Posted</span>
+                  <span class="stat-value font-maglite">{{ mission.postedDate }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label font-hermione">Category</span>
+                  <span class="stat-value font-maglite">{{ mission.category }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+} @else if (isLoading) {
+  <div class="loading-page">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <p class="font-hermione">Loading mission details...</p>
+    </div>
+  </div>
+} @else if (error) {
+  <div class="error-page">
+    <div class="error-card">
+      <div class="error-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+      </div>
+      <h2 class="font-maglite">{{ error }}</h2>
+      <button class="retry-btn font-maglite" (click)="goBack()">
+        Back to Missions
+      </button>
+    </div>
+  </div>
+} @else {
+  <div class="not-found-page">
+    <div class="not-found-card">
+      <h2 class="font-maglite">Mission not found</h2>
+      <button class="back-to-missions-btn font-maglite" (click)="goBack()">
+        Back to Missions
+      </button>
+    </div>
+  </div>
+}

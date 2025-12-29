@@ -1,3 +1,88 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Cormorant+Upright:wght@300;400;500&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #faf9f6;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: #70050D;
+  line-height: 1.6;
+}
+app-root {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+.font-maglite {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.font-hermione {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.font-ethereal {
+  font-family: 'Cormorant Upright', Georgia, serif;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+p, span {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.02em;
+}
+.text-burgundy { color: #70050D; }
+.text-red-violet { color: #B53572; }
+.text-cardinal { color: #BF152C; }
+.text-dingley { color: #657A42; }
+.text-gold { color: #FBD217; }
+.bg-burgundy { background-color: #70050D; }
+.bg-red-violet { background-color: #B53572; }
+.bg-cardinal { background-color: #BF152C; }
+.bg-dingley { background-color: #657A42; }
+.bg-gold { background-color: #FBD217; }
+.bg-cream { background-color: #faf9f6; }
+.bg-warm-white { background-color: #f5f3ef; }
+::selection {
+  background-color: #B53572;
+  color: #faf9f6;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #faf9f6;
+}
+::-webkit-scrollbar-thumb {
+  background: #70050D;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B53572;
+}
+*:focus {
+  outline: none;
+}
+*:focus-visible {
+  outline: 2px solid #B53572;
+  outline-offset: 2px;
+}

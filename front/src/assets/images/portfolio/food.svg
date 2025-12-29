@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#8B4513" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <circle cx="200" cy="110" r="50" fill="none" stroke="#fff" stroke-width="4"/>
+    <circle cx="180" cy="100" r="8"/>
+    <circle cx="210" cy="95" r="6"/>
+    <circle cx="195" cy="120" r="7"/>
+    <circle cx="220" cy="115" r="5"/>
+    <path d="M140 180 L200 160 L260 180" fill="none" stroke="#fff" stroke-width="3"/>
+    <circle cx="200" cy="160" r="8"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Food Delivery</text>
+</svg>

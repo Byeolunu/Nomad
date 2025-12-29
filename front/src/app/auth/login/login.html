@@ -1,52 +1,119 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-  <div class="w-full max-w-md bg-gray-800 rounded-lg shadow-xl p-8">
-    <h2 class="text-3xl font-bold text-white mb-8 text-center">Login</h2>
-    
-    <form (ngSubmit)="onLogin()" class="space-y-6">
-      <div>
-        <label class="block text-gray-300 text-sm font-semibold mb-2">Email:</label>
-        <input 
-          type="email" 
-          [(ngModel)]="email" 
-          name="email" 
-          required 
-          autocomplete="email"
-          class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-pink-600 transition"
-          placeholder="your@email.com"
-        />
+<div class="auth-page">
+  <div class="auth-bg-pattern"></div>
+  <div class="auth-container">
+    <div class="auth-branding">
+      <div class="branding-content">
+        <div class="brand-logo">
+          <span class="logo-icon">N</span>
+        </div>
+        <h1 class="brand-title font-maglite">Welcome Back</h1>
+        <p class="brand-subtitle font-hermione">Connect with Morocco's finest talents and opportunities</p>
+        <div class="brand-features">
+          <div class="feature-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="font-hermione">Access top freelancers</span>
+          </div>
+          <div class="feature-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="font-hermione">Find exciting missions</span>
+          </div>
+          <div class="feature-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="font-hermione">Grow your career</span>
+          </div>
+        </div>
       </div>
-
-      <div>
-        <label class="block text-gray-300 text-sm font-semibold mb-2">Password:</label>
-        <input 
-          type="password" 
-          [(ngModel)]="password" 
-          name="password" 
-          required 
-          autocomplete="current-password"
-          class="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-pink-600 transition"
-          placeholder="••••••••"
-        />
+      <div class="zellij-decoration">
+        <svg viewBox="0 0 100 100" class="zellij-svg">
+          <pattern id="zellij-login" patternUnits="userSpaceOnUse" width="20" height="20">
+            <path d="M10 0L20 10L10 20L0 10Z" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="10" cy="10" r="2" fill="currentColor" opacity="0.3"/>
+          </pattern>
+          <rect width="100" height="100" fill="url(#zellij-login)"/>
+        </svg>
       </div>
-
-      <button 
-        type="submit"
-        class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
-      >
-        Login
-      </button>
-    </form>
-
-    @if (errorMessage) {
-      <div class="mt-6 p-4 bg-red-900 border border-red-700 rounded-lg">
-        <p class="text-red-200 text-sm">{{ errorMessage }}</p>
+    </div>
+    <div class="auth-form-section">
+      <div class="form-card">
+        <div class="form-header">
+          <h2 class="form-title font-maglite">Sign In</h2>
+          <p class="form-subtitle font-hermione">Enter your credentials to continue</p>
+        </div>
+        <form (ngSubmit)="onLogin()" class="auth-form">
+          <div class="form-group">
+            <label class="form-label font-hermione">Email Address</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              <input 
+                type="email" 
+                [(ngModel)]="email" 
+                name="email" 
+                required 
+                autocomplete="email"
+                class="form-input font-hermione"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label font-hermione">Password</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+              <input 
+                type="password" 
+                [(ngModel)]="password" 
+                name="password" 
+                required 
+                autocomplete="current-password"
+                class="form-input font-hermione"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" class="checkbox" />
+              <span class="font-hermione">Remember me</span>
+            </label>
+            <a href="#" class="forgot-link font-hermione">Forgot password?</a>
+          </div>
+          <button type="submit" class="submit-btn font-maglite">
+            Sign In
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+        </form>
+        @if (errorMessage) {
+          <div class="alert alert-error">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="font-hermione">{{ errorMessage }}</p>
+          </div>
+        }
+        @if (successMessage) {
+          <div class="alert alert-success">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="font-hermione">{{ successMessage }}</p>
+          </div>
+        }
+        <div class="form-footer">
+          <p class="font-hermione">Don't have an account? <a routerLink="/signup" class="signup-link">Sign up</a></p>
+        </div>
       </div>
-    }
-
-    @if (successMessage){
-      <div class="mt-6 p-4 bg-green-900 border border-green-700 rounded-lg">
-        <p class="text-green-200 text-sm">{{ successMessage }}</p>
-      </div>
-    }
+    </div>
   </div>
 </div>

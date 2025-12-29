@@ -1,0 +1,175 @@
+@if (isLoading) {
+  <div class="loading-page">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <p class="font-hermione">Loading profile...</p>
+    </div>
+  </div>
+} @else if (error) {
+  <div class="error-page">
+    <div class="error-card">
+      <div class="error-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+      </div>
+      <h2 class="font-maglite">{{ error }}</h2>
+      <button class="back-to-list-btn font-maglite" (click)="goBack()">Back to Freelancers</button>
+    </div>
+  </div>
+} @else if (freelancer) {
+  <div class="freelancer-profile-page">
+    <div class="profile-container">
+      <button class="back-btn font-maglite" (click)="goBack()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Freelancers
+      </button>
+      <div class="profile-layout">
+        <aside class="profile-sidebar">
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <span class="font-maglite">{{ freelancer.avatar }}</span>
+              </div>
+              <h2 class="profile-name font-maglite">{{ freelancer.name }}</h2>
+              <p class="profile-title font-hermione">{{ freelancer.title }}</p>
+              <div class="profile-rating">
+                <svg class="star-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+                <span class="rating-value font-hermione">{{ freelancer.rating }}</span>
+                <span class="review-count font-hermione">({{ freelancer.reviewCount }} reviews)</span>
+              </div>
+              <div class="profile-location">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span class="font-hermione">{{ freelancer.location }}</span>
+              </div>
+              <button class="hire-btn font-maglite" (click)="hireFreelancer()">
+                @if (isLoggedIn && isRecruiter) {
+                  Hire Now
+                } @else {
+                  Hire Me
+                }
+              </button>
+              <a href="mailto:{{ freelancer.email }}">
+              <button class="contact-btn font-maglite">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                Contact
+              </button>
+            </a>
+            </div>
+            <div class="profile-stats">
+              <div class="stat-row">
+                <span class="stat-label font-hermione">Hourly Rate</span>
+                <span class="stat-value font-maglite">{{ freelancer.hourlyRate }} MAD</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label font-hermione">Projects Completed</span>
+                <span class="stat-value font-maglite">{{ freelancer.completedProjects }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label font-hermione">Success Rate</span>
+                <span class="stat-value font-maglite">98%</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <main class="profile-main">
+          <section class="content-card">
+            <h3 class="section-title font-maglite">About</h3>
+            <p class="about-text font-hermione">{{ freelancer.bio }}</p>
+          </section>
+          <section class="content-card">
+            <h3 class="section-title font-maglite">Skills</h3>
+            <div class="skills-grid">
+              @for (skill of freelancer.skills; track skill) {
+                <span class="skill-tag font-hermione">{{ skill }}</span>
+              }
+            </div>
+          </section>
+          <section class="content-card">
+            <h3 class="section-title font-maglite">Portfolio</h3>
+            <div class="portfolio-grid">
+              @for (project of freelancer.portfolio; track project.id) {
+                <a class="portfolio-item" [href]="project.projectUrl" target="_blank" rel="noopener noreferrer">
+                  <div class="portfolio-image">
+                    <img [src]="project.image" [alt]="project.title" loading="lazy" (error)="$event.target.style.display='none'" />
+                  </div>
+                  <div class="portfolio-info">
+                    <h4 class="portfolio-title font-maglite">{{ project.title }}</h4>
+                    <p class="portfolio-desc font-hermione">{{ project.description }}</p>
+                  </div>
+                  <div class="portfolio-link-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                  </div>
+                </a>
+              }
+            </div>
+          </section>
+          <section class="content-card">
+            <h3 class="section-title font-maglite">Reviews ({{ freelancer.reviewCount }})</h3>
+            <div class="reviews-list">
+              @for (review of freelancer.reviews; track review.id) {
+                <div class="review-item">
+                  <div class="review-header">
+                    <div>
+                      <p class="review-author font-maglite">{{ review.author }}</p>
+                      <p class="review-date font-hermione">{{ review.date }}</p>
+                    </div>
+                    <div class="review-stars">
+                      @for (star of getStars(review.rating); track $index) {
+                        <svg class="star-icon" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                      }
+                    </div>
+                  </div>
+                  <p class="review-comment font-hermione">{{ review.comment }}</p>
+                </div>
+              }
+            </div>
+          </section>
+          <section class="content-card">
+            <h3 class="section-title font-maglite">Statistics</h3>
+            <div class="stats-grid">
+              <div class="stat-box burgundy">
+                <div class="stat-number font-maglite">{{ freelancer.completedProjects }}</div>
+                <div class="stat-text font-hermione">Projects</div>
+              </div>
+              <div class="stat-box violet">
+                <div class="stat-number font-maglite">{{ freelancer.reviewCount }}</div>
+                <div class="stat-text font-hermione">Reviews</div>
+              </div>
+              <div class="stat-box green">
+                <div class="stat-number font-maglite">{{ freelancer.rating }}</div>
+                <div class="stat-text font-hermione">Rating</div>
+              </div>
+              <div class="stat-box gold">
+                <div class="stat-number font-maglite">98%</div>
+                <div class="stat-text font-hermione">Success</div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="not-found-page">
+    <div class="not-found-card">
+      <h2 class="font-maglite">Freelancer not found</h2>
+      <button class="back-to-list-btn font-maglite" (click)="goBack()">
+        Back to Freelancers
+      </button>
+    </div>
+  </div>
+}

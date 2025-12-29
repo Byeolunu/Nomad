@@ -1,4 +1,145 @@
-header a {
-  font-weight: 500;
-  transition: color 0.2s ease-in-out;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #70050D;
+  border-bottom: 2px solid #FBD217;
+  box-shadow: 0 4px 20px rgba(112, 5, 13, 0.15);
+}
+.logo {
+  font-size: 1.75rem;
+  color: #FBD217;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+.logo:hover {
+  opacity: 0.9;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.nav-link {
+  color: #FBD217;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-link:hover {
+  opacity: 0.8;
+}
+.nav-link svg {
+  width: 18px;
+  height: 18px;
+}
+.nav-link-highlight {
+  background: rgba(251, 210, 23, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(251, 210, 23, 0.3);
+}
+.nav-link-highlight:hover {
+  background: rgba(251, 210, 23, 0.25);
+  opacity: 1;
+}
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.sign-in-link {
+  color: #FBD217;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: opacity 0.2s ease;
+}
+.sign-in-link:hover {
+  opacity: 0.8;
+}
+.register-btn {
+  padding: 0.5rem 1.5rem;
+  background-color: #B53572;
+  color: #FBD217;
+  border: 1px solid #FBD217;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+.register-btn:hover {
+  background-color: #9a2d61;
+  transform: translateY(-1px);
+}
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dashboard-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #FBD217;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(251, 210, 23, 0.1);
+  transition: all 0.2s ease;
+}
+.dashboard-link svg {
+  width: 18px;
+  height: 18px;
+}
+.dashboard-link:hover {
+  background: rgba(251, 210, 23, 0.2);
+}
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #B53572 0%, #70050D 100%);
+  border: 2px solid #FBD217;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FBD217;
+  font-size: 1rem;
+}
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(251, 210, 23, 0.4);
+  border-radius: 8px;
+  color: #FBD217;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.logout-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.logout-btn:hover {
+  background: rgba(251, 210, 23, 0.1);
+  border-color: #FBD217;
+}
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+  .nav-links {
+    display: none;
+  }
+  .logo {
+    font-size: 1.5rem;
+  }
 }

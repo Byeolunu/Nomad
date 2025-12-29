@@ -1,17 +1,40 @@
-<header class="w-full bg-black text-white flex justify-between items-center px-6 py-4 shadow-md">
-  <div class="text-2xl font-mono font-bold">DevFlow</div>
-
-  <nav class="space-x-6 hidden md:flex">
-    <a routerLink="/" class="hover:text-pink-600">Acceuil</a>
-    <a routerLink="/missions" class="hover:text-pink-600">Missions</a>
-    <a routerLink="/profile" class="hover:text-pink-600">Profile</a>
+<header class="header">
+  <a routerLink="/home" class="logo font-maglite">Nomad</a>
+  <nav class="nav-links">
+    <a routerLink="/home" class="nav-link font-hermione">Accueil</a>
+    <a routerLink="/missions" class="nav-link font-hermione">Missions</a>
+    <a routerLink="/freelancers" class="nav-link font-hermione">Freelancers</a>
+    @if (isLoggedIn && userRole === 'RECRUITER') {
+      <a routerLink="/post-mission" class="nav-link nav-link-highlight font-hermione">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Post Mission
+      </a>
+    }
   </nav>
-
-  <div class="space-x-4">
-    <!-- Use routerLink for Angular routing -->
-    <a routerLink="/login" class="text-white hover:text-pink-600 cursor-pointer">Sign In</a>
-    <a routerLink="/signup" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md cursor-pointer">
-      Register
-    </a>
+  <div class="auth-section">
+    @if (!isLoggedIn) {
+      <a routerLink="/login" class="sign-in-link font-hermione">Sign In</a>
+      <a routerLink="/signup" class="register-btn font-hermione">Register</a>
+    } @else {
+      <div class="user-menu">
+        @if (userRole === 'FREELANCER') {
+          <a routerLink="/dashboard" class="dashboard-link font-hermione">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            Dashboard
+          </a>
+        }
+        <div class="user-avatar font-maglite">{{ getUserInitial() }}</div>
+        <button class="logout-btn font-hermione" (click)="logout()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+          </svg>
+          Logout
+        </button>
+      </div>
+    }
   </div>
 </header>

@@ -1,0 +1,8 @@
+<button
+  [type]="type"
+  [disabled]="disabled"
+  [class]="'btn btn-' + variant + ' btn-' + size + ' ' + className"
+  (click)="onClick(); $event.stopPropagation()"
+>
+  <ng-content></ng-content>
+</button>

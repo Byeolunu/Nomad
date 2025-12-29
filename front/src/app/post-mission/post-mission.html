@@ -1,0 +1,146 @@
+<div class="post-mission-page">
+  <div class="page-container">
+    <div class="page-header">
+      <h1 class="page-title font-maglite">Post a New Mission</h1>
+      <p class="page-subtitle font-hermione">Find the perfect freelancer for your project</p>
+    </div>
+    <div class="form-card">
+      <form (ngSubmit)="onSubmit()" class="mission-form">
+        <div class="form-group">
+          <label class="form-label font-hermione">Mission Title *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="mission.title" 
+            name="title"
+            class="form-input font-hermione"
+            placeholder="e.g., Build an E-commerce Website"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label font-hermione">Description *</label>
+          <textarea 
+            [(ngModel)]="mission.description" 
+            name="description"
+            class="form-textarea font-hermione"
+            placeholder="Describe your project requirements, skills needed, and expected deliverables..."
+            rows="6"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label font-hermione">Mission Type *</label>
+          <div class="type-selector">
+            <button 
+              type="button" 
+              class="type-btn"
+              [class.active]="mission.type === 'FIXED'"
+              (click)="mission.type = 'FIXED'"
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span class="font-maglite">Fixed Price</span>
+              <span class="type-desc font-hermione">Set a fixed budget for the entire project</span>
+            </button>
+            <button 
+              type="button" 
+              class="type-btn"
+              [class.active]="mission.type === 'HOURLY'"
+              (click)="mission.type = 'HOURLY'"
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="font-maglite">Hourly Rate</span>
+              <span class="type-desc font-hermione">Pay based on hours worked</span>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label font-hermione">Required Skills</label>
+          <p class="form-hint font-hermione">Select the skills needed for this mission</p>
+          <div class="skills-grid">
+            @for (skill of availableSkills; track skill.id) {
+              <button 
+                type="button"
+                class="skill-tag"
+                [class.selected]="isSkillSelected(skill.id)"
+                (click)="toggleSkill(skill)"
+              >
+                {{ skill.name }}
+                @if (isSkillSelected(skill.id)) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                }
+              </button>
+            }
+          </div>
+          @if (selectedSkillIds.length > 0) {
+            <p class="selected-count font-hermione">{{ selectedSkillIds.length }} skill(s) selected</p>
+          }
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label font-hermione">
+              {{ mission.type === 'HOURLY' ? 'Hourly Rate (MAD/hr)' : 'Budget (MAD)' }} *
+            </label>
+            <div class="input-with-icon">
+              <span class="input-prefix font-hermione">MAD</span>
+              <input 
+                type="number" 
+                [(ngModel)]="mission.budget" 
+                name="budget"
+                class="form-input form-input-with-prefix font-hermione"
+                [placeholder]="mission.type === 'HOURLY' ? '150' : '10000'"
+                min="0"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label font-hermione">Deadline</label>
+            <input 
+              type="date" 
+              [(ngModel)]="mission.deadline" 
+              name="deadline"
+              class="form-input font-hermione"
+            />
+          </div>
+        </div>
+        @if (errorMessage) {
+          <div class="alert alert-error">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="font-hermione">{{ errorMessage }}</p>
+          </div>
+        }
+        @if (successMessage) {
+          <div class="alert alert-success">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="font-hermione">{{ successMessage }}</p>
+          </div>
+        }
+        <button 
+          type="submit" 
+          class="submit-btn font-maglite"
+          [disabled]="isSubmitting"
+        >
+          @if (isSubmitting) {
+            <span class="loading-spinner"></span>
+            Posting...
+          } @else {
+            Post Mission
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

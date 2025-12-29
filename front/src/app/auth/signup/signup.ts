@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth';
-import { Router } from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   templateUrl: './signup.html',
+  styleUrl: './signup.css',
   imports: [
-    FormsModule
+    FormsModule,
+    RouterLink
   ]
 })
 export class SignupComponent {

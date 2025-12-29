@@ -1,0 +1,33 @@
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(112, 5, 13, 0.1);
+  border: 1px solid rgba(112, 5, 13, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(112, 5, 13, 0.15);
+  border-color: rgba(181, 53, 114, 0.3);
+}
+.card.card-flat {
+  box-shadow: none;
+  border: 2px solid #e8e0d5;
+}
+.card.card-flat:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #70050D;
+}
+.card.card-gradient {
+  background: linear-gradient(135deg, #fefcf3 0%, #fff8e7 100%);
+}
+.card.card-burgundy {
+  background: linear-gradient(135deg, #70050D 0%, #BF152C 100%);
+  color: white;
+}
+.card.card-gold {
+  background: linear-gradient(135deg, #FBD217 0%, #f5c800 100%);
+  color: #70050D;
+}

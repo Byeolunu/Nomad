@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#006400" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <rect x="130" y="90" width="140" height="90" rx="10"/>
+    <rect x="145" y="105" width="50" height="30" rx="3" fill="#006400"/>
+    <circle cx="240" cy="145" r="15"/>
+    <rect x="145" y="150" width="60" height="8" rx="2"/>
+    <rect x="145" y="165" width="40" height="8" rx="2"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Banking App</text>
+</svg>

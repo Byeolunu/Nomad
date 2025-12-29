@@ -1,0 +1,162 @@
+<div class="freelancers-page">
+  <header class="freelancers-header">
+    <div class="header-content">
+      <h1 class="header-title font-maglite">Find Freelancers</h1>
+      <p class="header-subtitle font-hermione">Browse {{ freelancers.length }} talented professionals ready to work on your project</p>
+    </div>
+  </header>
+  <div class="freelancers-container">
+    <div class="freelancers-layout">
+      <aside class="filters-sidebar">
+        <div class="filters-card">
+          <div class="filters-header">
+            <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            </svg>
+            <h3 class="font-maglite">Filters</h3>
+          </div>
+          <div class="filters-body">
+            <div class="filter-group">
+              <label class="filter-label font-hermione">Search</label>
+              <div class="search-input-wrapper">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input 
+                  type="text" 
+                  class="filter-input font-hermione"
+                  placeholder="Name or skills..."
+                  [(ngModel)]="searchQuery"
+                  (ngModelChange)="onSearchChange()"
+                >
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label font-hermione">Location</label>
+              <select 
+                class="filter-select font-hermione"
+                [(ngModel)]="selectedLocation"
+                (ngModelChange)="onLocationChange()"
+              >
+                <option value="all">All Locations</option>
+                @for (location of locations; track location) {
+                  <option [value]="location">{{ location }}</option>
+                }
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label font-hermione">Minimum Rating</label>
+              <select 
+                class="filter-select font-hermione"
+                [(ngModel)]="minRating"
+                (ngModelChange)="onRatingChange()"
+              >
+                <option value="all">Any Rating</option>
+                <option value="4.5">4.5+ Stars</option>
+                <option value="4.0">4.0+ Stars</option>
+                <option value="3.5">3.5+ Stars</option>
+              </select>
+            </div>
+            <app-button variant="outline" (clicked)="clearFilters()" className="w-full font-maglite">
+              Clear Filters
+            </app-button>
+          </div>
+        </div>
+      </aside>
+      <main class="freelancers-list">
+        @if (isLoading) {
+          <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p class="font-hermione">Loading freelancers...</p>
+          </div>
+        }
+        @if (error && !isLoading) {
+          <div class="error-state">
+            <div class="error-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+            </div>
+            <p class="font-hermione">{{ error }}</p>
+            <app-button variant="default" (clicked)="loadFreelancers()" className="font-maglite">Try Again</app-button>
+          </div>
+        }
+        @if (!isLoading && !error) {
+          <div class="freelancers-count">
+            <p class="font-hermione">Showing {{ filteredFreelancers.length }} freelancer{{ filteredFreelancers.length !== 1 ? 's' : '' }}</p>
+          </div>
+          <div class="freelancers-grid">
+            @for (freelancer of filteredFreelancers; track freelancer.id) {
+              <app-card className="freelancer-card-wrapper" (click)="navigateToProfile(freelancer.id)">
+              <article class="freelancer-card-content">
+              <div class="freelancer-card-header">
+                <div class="freelancer-avatar">
+                  <span class="font-maglite">{{ freelancer.avatar }}</span>
+                </div>
+                <div class="freelancer-info">
+                  <h3 class="freelancer-name font-maglite">{{ freelancer.name }}</h3>
+                  <p class="freelancer-title font-hermione">{{ freelancer.title }}</p>
+                  <div class="freelancer-rating">
+                    <svg class="star-icon" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <span class="rating-value font-hermione">{{ freelancer.rating }}</span>
+                    <span class="review-count font-hermione">({{ freelancer.reviewCount }})</span>
+                  </div>
+                </div>
+              </div>
+              <p class="freelancer-bio font-hermione">{{ freelancer.bio }}</p>
+              <div class="freelancer-skills">
+                @for (skill of freelancer.skills.slice(0, 4); track skill) {
+                  <span class="skill-badge font-hermione">{{ skill }}</span>
+                }
+                @if (freelancer.skills.length > 4) {
+                  <span class="skill-badge more font-hermione">+{{ freelancer.skills.length - 4 }}</span>
+                }
+              </div>
+              <div class="freelancer-footer">
+                <div class="freelancer-meta">
+                  <div class="meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="font-hermione">{{ freelancer.location }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="font-hermione">{{ freelancer.completedProjects }} projects</span>
+                  </div>
+                </div>
+                <div class="freelancer-rate font-maglite">
+                  {{ freelancer.hourlyRate }} MAD/hr
+                </div>
+              </div>
+              <app-button variant="gold" size="sm" (clicked)="navigateToProfile(freelancer.id)" className="w-full font-maglite">
+                View Profile
+              </app-button>
+            </article>
+              </app-card>
+          }
+          @if (filteredFreelancers.length === 0) {
+            <div class="no-results">
+              <div class="no-results-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <h3 class="font-maglite">No freelancers found</h3>
+              <p class="font-hermione">Try adjusting your filters to see more results</p>
+              <app-button variant="outline" (clicked)="clearFilters()" className="font-maglite">
+                Clear All Filters
+              </app-button>
+            </div>
+          }
+        </div>
+        }
+      </main>
+    </div>
+  </div>
+</div>
