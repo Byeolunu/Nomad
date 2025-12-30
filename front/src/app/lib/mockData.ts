@@ -19,7 +19,8 @@ export const categories: Category[] = [
   { name: 'Writing', icon: 'PenTool', count: 156 },
   { name: 'Marketing', icon: 'Megaphone', count: 134 },
   { name: 'Video', icon: 'Video', count: 98 },
-  { name: 'Translation', icon: 'Languages', count: 87 }
+  { name: 'Translation', icon: 'Languages', count: 87 },
+  { name: 'Data Science', icon: 'Database', count: 76 }
 ];
 
 export const testimonials: Testimonial[] = [

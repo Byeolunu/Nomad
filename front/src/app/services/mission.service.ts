@@ -157,6 +157,10 @@ export class MissionService {
       return 'Translation';
     }
     return 'Development';
+    if (text.includes('machine learning') || text.includes('data science') || text.includes('ai') ||
+       text.includes('deep learning')) {
+      return 'Data Science';
+    }
   }
 
   private inferExperienceLevel(budget: number | null): string {

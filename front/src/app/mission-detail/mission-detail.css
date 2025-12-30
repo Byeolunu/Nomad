@@ -317,6 +317,41 @@
   color: #70050D;
   opacity: 0.6;
 }
+.recruiter-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(112, 5, 13, 0.03);
+  border-radius: 8px;
+}
+.recruiter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.recruiter-icon {
+  width: 16px;
+  height: 16px;
+  color: #70050D;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+.recruiter-item span,
+.recruiter-link {
+  font-size: 0.85rem;
+  color: #70050D;
+  opacity: 0.8;
+}
+.recruiter-link {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+.recruiter-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
 .profile-btn {
   width: 100%;
   padding: 0.875rem;

@@ -16,7 +16,6 @@ export class MissionDetailComponent implements OnInit {
   similarMissions: MissionDisplay[] = [];
   isLoading = true;
   error: string | null = null;
-  
   isLoggedIn = false;
   isFreelancer = false;
 
