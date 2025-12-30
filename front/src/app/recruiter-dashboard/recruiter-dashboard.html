@@ -1,0 +1,161 @@
+<div class="recruiter-dashboard-page">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <div class="header-content">
+        <h1 class="dashboard-title font-maglite">My Missions</h1>
+        <p class="dashboard-subtitle font-hermione">Manage your posted missions and applications</p>
+      </div>
+      <button class="post-mission-btn font-maglite" (click)="navigateToPostMission()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Post New Mission
+      </button>
+    </div>
+
+    @if (isLoading) {
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p class="font-hermione">Loading your missions...</p>
+      </div>
+    } @else if (error) {
+      <div class="error-state">
+        <p class="font-hermione">{{ error }}</p>
+        <button class="retry-btn font-maglite" (click)="loadMissions()">Try Again</button>
+      </div>
+    } @else if (missions.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+          </svg>
+        </div>
+        <h2 class="font-maglite">No missions yet</h2>
+        <p class="font-hermione">Post your first mission to start hiring talented freelancers</p>
+        <button class="post-first-btn font-maglite" (click)="navigateToPostMission()">Post Your First Mission</button>
+      </div>
+    } @else {
+      <div class="missions-grid">
+        @for (mission of missions; track mission.id) {
+          <div class="mission-card" [class.selected]="selectedMission?.id === mission.id">
+            <div class="mission-card-header" (click)="selectMission(mission)">
+              <div class="mission-info">
+                <h3 class="mission-title font-maglite">{{ mission.title }}</h3>
+                <p class="mission-budget font-hermione">{{ mission.budget }} MAD</p>
+              </div>
+              <div class="mission-meta">
+                <span class="application-count font-hermione">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                  {{ mission.applicationCount || 0 }} applications
+                </span>
+                <span class="mission-date font-hermione">{{ formatDate(mission.createdAt) }}</span>
+              </div>
+              <div class="expand-icon" [class.expanded]="selectedMission?.id === mission.id">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+            </div>
+
+            @if (selectedMission?.id === mission.id) {
+              <div class="applications-section">
+                <h4 class="applications-title font-maglite">Applications</h4>
+                
+                @if (!mission.applications || mission.applications.length === 0) {
+                  <div class="no-applications">
+                    <p class="font-hermione">No applications yet for this mission</p>
+                  </div>
+                } @else {
+                  <div class="applications-list">
+                    @for (app of mission.applications; track app.id) {
+                      <div class="application-card">
+                        <div class="applicant-header">
+                          <div class="applicant-info" (click)="viewFreelancerProfile(app.freelancer.id)">
+                            <div class="applicant-avatar font-maglite">
+                              {{ app.freelancer.firstName?.charAt(0) }}{{ app.freelancer.lastName?.charAt(0) }}
+                            </div>
+                            <div class="applicant-details">
+                              <h5 class="applicant-name font-maglite">{{ app.freelancer.firstName }} {{ app.freelancer.lastName }}</h5>
+                              <p class="applicant-title font-hermione">{{ app.freelancer.title || 'Freelancer' }}</p>
+                            </div>
+                          </div>
+                          <span class="application-status font-hermione" [ngClass]="getStatusClass(app.status)">
+                            {{ app.status }}
+                          </span>
+                        </div>
+
+                        <div class="application-details">
+                          <div class="detail-row">
+                            <span class="detail-label font-hermione">Proposed Budget:</span>
+                            <span class="detail-value font-maglite">{{ app.proposedBudget }} MAD</span>
+                          </div>
+                          @if (app.estimatedDays) {
+                            <div class="detail-row">
+                              <span class="detail-label font-hermione">Estimated Days:</span>
+                              <span class="detail-value font-maglite">{{ app.estimatedDays }} days</span>
+                            </div>
+                          }
+                          <div class="detail-row">
+                            <span class="detail-label font-hermione">Applied:</span>
+                            <span class="detail-value font-hermione">{{ formatDate(app.appliedDate) }}</span>
+                          </div>
+                        </div>
+
+                        @if (app.coverLetter) {
+                          <div class="cover-letter">
+                            <p class="cover-letter-label font-hermione">Cover Letter:</p>
+                            <p class="cover-letter-text font-hermione">{{ app.coverLetter }}</p>
+                          </div>
+                        }
+
+                        @if (app.status === 'PENDING') {
+                          <div class="application-actions">
+                            <button 
+                              class="accept-btn font-maglite" 
+                              (click)="acceptApplication(app.id)"
+                              [disabled]="processingApplicationId === app.id"
+                            >
+                              @if (processingApplicationId === app.id) {
+                                Processing...
+                              } @else {
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Accept
+                              }
+                            </button>
+                            <button 
+                              class="reject-btn font-maglite" 
+                              (click)="rejectApplication(app.id)"
+                              [disabled]="processingApplicationId === app.id"
+                            >
+                              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                              </svg>
+                              Reject
+                            </button>
+                          </div>
+                        }
+
+                        @if (app.status === 'ACCEPTED') {
+                          <div class="accepted-notice">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="font-hermione">You've accepted this freelancer. You can now leave a review on their profile!</span>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

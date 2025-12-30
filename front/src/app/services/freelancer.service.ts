@@ -87,6 +87,7 @@ export interface Review {
   date: string;
   rating: number;
   comment: string;
+  recruiterId?: number;
 }
 
 @Injectable({
@@ -178,7 +179,8 @@ export class FreelancerService {
         author: r.authorName || (r.recruiter ? `${r.recruiter.firstName} ${r.recruiter.lastName}` : 'Anonymous'),
         date: this.formatReviewDate(r.createdAt),
         rating: r.rating,
-        comment: r.comment
+        comment: r.comment,
+        recruiterId: r.recruiter?.id
       }));
     }
     return [];

@@ -18,23 +18,29 @@ public class Review {
     private Long id;
     @Column(nullable = false)
     private Integer rating; 
+
     @Column(length = 2000)
     private String comment;
     private String authorName; 
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "freelancer_id", nullable = false)
     @JsonIgnore
     private Freelancer freelancer;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiter_id")
     @JsonIgnoreProperties({"postedMissions", "hibernateLazyInitializer", "handler"})
     private Recruiter recruiter;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     @JsonIgnoreProperties({"requiredSkills", "recruiter", "applications", "hibernateLazyInitializer", "handler"})
     private Mission mission;
+    
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {

@@ -6,12 +6,11 @@ import { MissionService, MissionDisplay } from '../services/mission.service';
 import { categories } from '../lib/mockData';
 import { CardComponent } from '../components/ui/card/card';
 import { ButtonComponent } from '../components/ui/button/button';
-import { InputComponent } from '../components/ui/input/input';
 
 @Component({
   selector: 'app-missions',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardComponent, ButtonComponent, InputComponent],
+  imports: [CommonModule, FormsModule, CardComponent, ButtonComponent],
   templateUrl: './missions.html',
   styleUrls: ['./missions.css']
 })

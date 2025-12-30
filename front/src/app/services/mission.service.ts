@@ -130,16 +130,15 @@ export class MissionService {
   private inferCategory(skills: string[], title: string, description: string): string {
     const text = (title + ' ' + description + ' ' + skills.join(' ')).toLowerCase();
     
+    if (text.includes('machine learning') || text.includes('data science') || text.includes('ai') ||
+       text.includes('deep learning')) {
+      return 'Data Science';
+    }
     if (text.includes('react') || text.includes('angular') || text.includes('node') || 
         text.includes('java') || text.includes('python') || text.includes('developer') ||
         text.includes('backend') || text.includes('frontend') || text.includes('full-stack')) {
       return 'Development';
     }
-    if(text.includes('machine learning') || text.includes('data science') || text.includes('ai') ||
-       text.includes('deep learning')) {
-      return 'Data Science';
-    }
-
     if (text.includes('design') || text.includes('ui') || text.includes('ux') || 
         text.includes('figma') || text.includes('photoshop')) {
       return 'Design';
@@ -157,10 +156,6 @@ export class MissionService {
       return 'Translation';
     }
     return 'Development';
-    if (text.includes('machine learning') || text.includes('data science') || text.includes('ai') ||
-       text.includes('deep learning')) {
-      return 'Data Science';
-    }
   }
 
   private inferExperienceLevel(budget: number | null): string {

@@ -49,10 +49,10 @@
               My Dashboard
             </button>
           } @else if (userRole === 'RECRUITER') {
-            <button class="btn-primary font-maglite" (click)="navigateToPostMission()">
-              Post a Mission
+            <button class="btn-primary font-maglite" (click)="navigateToDashboard()">
+              My Missions
               <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
               </svg>
             </button>
             <button class="btn-outline font-maglite" (click)="navigateToFreelancers()">
@@ -73,8 +73,19 @@
         <span class="section-tag font-hermione">Explore</span>
         <h2 class="section-title font-maglite">Categories</h2>
       </div>
-      <div class="categories-grid">
+    </div>
+    <div class="categories-carousel">
+      <div class="categories-track">
         @for (category of categories; track category.name) {
+          <div class="category-card" (click)="navigateToMissions()">
+            <div class="category-icon">
+              <span>{{ getIcon(category.icon) }}</span>
+            </div>
+            <h3 class="category-name font-maglite">{{ category.name }}</h3>
+            <p class="category-count font-hermione">{{ category.count }} missions</p>
+          </div>
+        }
+        @for (category of categories; track category.name + '-dup') {
           <div class="category-card" (click)="navigateToMissions()">
             <div class="category-icon">
               <span>{{ getIcon(category.icon) }}</span>

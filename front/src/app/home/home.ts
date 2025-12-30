@@ -69,7 +69,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   navigateToDashboard() {
-    this.router.navigate(['/dashboard']);
+    if (this.userRole === 'RECRUITER') {
+      this.router.navigate(['/recruiter-dashboard']);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   navigateToFreelancers() {
@@ -83,7 +87,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       'PenTool': '✎',
       'Megaphone': '◈',
       'Video': '▶',
-      'Languages': '◎'
+      'Languages': '◎',
+      'Database': '◉'
     };
     return iconMap[iconName] || '○';
   }

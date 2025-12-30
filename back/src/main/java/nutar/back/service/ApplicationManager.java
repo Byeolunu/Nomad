@@ -35,7 +35,8 @@ public class ApplicationManager implements ApplicationService
     public Application updateApplicationStatus(Long applicationId, String status) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
-        ApplicationStatus newStatus = ApplicationStatus.valueOf(status.toUpperCase());
+        String cleanStatus = status.replace("\"", "").trim();
+        ApplicationStatus newStatus = ApplicationStatus.valueOf(cleanStatus.toUpperCase());
         application.setStatus(newStatus);
         return applicationRepository.save(application);
     }
