@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: linear-gradient(rgba(251, 234, 234, 0.9), rgba(248, 233, 233, 0.9)), url('/assets/images/zellige3.jpg');
+  background-image: linear-gradient(rgba(251, 234, 234, 0.95), rgba(248, 233, 233, 0.95)), url('/assets/images/zelligeRed.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -104,8 +104,9 @@
   white-space: nowrap;
 }
 .search-btn:hover {
-  background: #B53572;
+  background: linear-gradient(135deg, #70050D, #911b21);
   transform: translateY(-1px);
+  scale:1.02;
 }
 .hero-actions {
   display: flex;
@@ -127,8 +128,9 @@
   transition: all 0.3s ease;
 }
 .btn-primary:hover {
-  background: #B53572;
+  background: linear-gradient(135deg, #70050D, #911b21);
   transform: translateY(-2px);
+  scale:1.02;
 }
 .btn-arrow {
   width: 18px;
@@ -137,6 +139,8 @@
 }
 .btn-primary:hover .btn-arrow {
   transform: translateX(4px);
+  scale:1.02;
+
 }
 .btn-outline {
   background: transparent;
@@ -149,16 +153,12 @@
   transition: all 0.3s ease;
 }
 .btn-outline:hover {
-  background: #70050D;
+  background: linear-gradient(135deg, #70050D, #911b21);
   color: #faf9f6;
+  transform: translateY(-2px);
+  scale:1.02;
 }
-.hero-decoration {
-  position: absolute;
-  right: 5%;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-}
+
 
 
 .categories-section {
@@ -199,6 +199,7 @@
   gap: 1.5rem;
   animation: scroll 25s linear infinite;
   width: fit-content;
+  margin:5px;
 }
 .categories-track:hover {
   animation-play-state: paused;
@@ -214,13 +215,18 @@
 .category-card {
   flex-shrink: 0;
   width: 180px;
+  height: 240px;
   text-align: center;
   padding: 2rem 1.5rem;
   background: #faf9f6;
-  border-radius: 16px;
+  border-radius: 90px 90px 8px 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .category-card:hover {
   transform: translateY(-4px);
@@ -251,7 +257,11 @@
 .steps-section {
   position: relative;
   padding: 8rem 2rem;
-  background: #70050D;
+  background-image: linear-gradient(rgba(112, 5, 13, 0.95), rgba(112, 5, 13, 0.95)), url('/assets/images/tarz.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   overflow: hidden;
 }
 .section-header-light .section-tag {
@@ -360,7 +370,7 @@
 .testimonials-section {
   position: relative;
   padding: 8rem 2rem;
-  background-image: linear-gradient(rgba(10, 72, 51, 0.9), rgba(10, 72, 51, 0.7)), url('/assets/images/zellige2.jpg');
+  background-image: linear-gradient(rgba(10, 72, 51, 0.9), rgba(10, 72, 51, 0.7)), url('/assets/images/zelligeGreen.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -465,8 +475,9 @@
   transition: all 0.3s ease;
 }
 .cta-btn-primary:hover {
-  background: #B53572;
+  background: linear-gradient(135deg, #70050D, #911b21);
   transform: translateY(-2px);
+  scale: 1.02;
 }
 .cta-btn-secondary {
   background: transparent;
@@ -479,8 +490,10 @@
   transition: all 0.3s ease;
 }
 .cta-btn-secondary:hover {
-  background: #70050D;
+  background: linear-gradient(135deg, #70050D, #911b21);
   color: #faf9f6;
+  transform: translateY(-2px);
+  scale: 1.02;
 }
 .cta-decoration {
   position: absolute;
@@ -501,9 +514,7 @@
     padding: 4rem 1.5rem;
     min-height: auto;
   }
-  .hero-decoration {
-    display: none;
-  }
+
   .search-container {
     flex-direction: column;
     border-radius: 20px;
