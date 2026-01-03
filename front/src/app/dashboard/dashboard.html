@@ -1,0 +1,299 @@
+<div class="dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="avatar font-maglite">{{ getInitials() }}</div>
+        <div>
+          <p class="eyebrow font-hermione">Freelancer</p>
+          <h2 class="font-maglite">{{ getUserName() }}</h2>
+          <p class="email font-hermione">{{ userEmail }}</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav font-hermione">
+        <button class="nav-item" [class.active]="activeTab === 'overview'" (click)="setTab('overview')">
+          <span>Overview</span>
+        </button>
+        <button class="nav-item" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">
+          <span>Profile</span>
+        </button>
+        <button class="nav-item" [class.active]="activeTab === 'missions'" (click)="setTab('missions')">
+          <span>My Missions</span>
+        </button>
+        <button class="nav-item" [class.active]="activeTab === 'proposals'" (click)="setTab('proposals')">
+          <span>My Proposals</span>
+        </button>
+        <button class="nav-item" [class.active]="activeTab === 'messages'" (click)="setTab('messages')">
+          <span>Messages</span>
+        </button>
+      </nav>
+
+    </aside>
+
+    <main class="main-area">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow font-hermione">Welcome back</p>
+          <h1 class="font-maglite">Your dashboard</h1>
+        </div>
+        <button class="primary-btn font-maglite" (click)="goToMissions()">Browse missions</button>
+      </header>
+
+      @if (activeTab === 'overview') {
+        <section class="summary-grid">
+          @for (stat of stats; track stat.label) {
+            <div class="summary-card">
+              <p class="label font-hermione">{{ stat.label }}</p>
+              <h3 class="value font-maglite">{{ stat.value }}</h3>
+              <span class="trend font-hermione">{{ stat.trend }}</span>
+            </div>
+          }
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow font-hermione">Pipeline</p>
+              <h2 class="font-maglite">My missions</h2>
+            </div>
+            <button class="text-link font-maglite" (click)="setTab('missions')">View all</button>
+          </div>
+          <div class="cards-grid">
+            @for (mission of activeMissions; track mission.title) {
+              <article class="card">
+                <div class="card-top">
+                  <h3 class="font-maglite">{{ mission.title }}</h3>
+                  <span class="chip font-hermione">{{ mission.status }}</span>
+                </div>
+                <p class="meta font-hermione">{{ mission.due }}</p>
+                <div class="budget font-maglite">{{ mission.budget }}</div>
+                <div class="progress">
+                  <div class="bar" [style.width.%]="mission.progress"></div>
+                </div>
+                <div class="progress-label font-hermione">{{ mission.progress }}% done</div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="panel two-col">
+          <div>
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow font-hermione">Opportunities</p>
+                <h2 class="font-maglite">My proposals</h2>
+              </div>
+            </div>
+            <div class="list">
+              @for (proposal of proposals; track proposal.mission) {
+                <div class="list-item">
+                  <div>
+                    <h3 class="font-maglite">{{ proposal.mission }}</h3>
+                    <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
+                  </div>
+                  <span class="chip muted font-hermione">{{ proposal.status }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div>
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow font-hermione">Inbox</p>
+                <h2 class="font-maglite">Messages</h2>
+              </div>
+            </div>
+            <div class="list">
+              @for (thread of messageThreads; track thread.id) {
+                <div class="list-item" [class.unread]="thread.unread">
+                  <div>
+                    <h3 class="font-maglite">{{ thread.participant }}</h3>
+                    <p class="meta font-hermione">{{ getLastMessage(thread)?.text || 'No messages yet' }}</p>
+                  </div>
+                  <span class="meta font-hermione">{{ getLastMessage(thread)?.time || 'Now' }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+      }
+
+      @if (activeTab === 'profile') {
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow font-hermione">Profile</p>
+              <h2 class="font-maglite">Manage your profile</h2>
+            </div>
+            @if (profileSaved) {
+              <span class="chip font-hermione">Saved</span>
+            }
+          </div>
+
+          @if (profileError) {
+            <div class="state-block error">
+              <p class="font-hermione">{{ profileError }}</p>
+              <button class="primary-btn font-maglite" (click)="loadProfile()">Retry</button>
+            </div>
+          } @else {
+            <div class="profile-form">
+              <div class="form-row two">
+                <label class="form-field">
+                  <span class="label font-hermione">Name</span>
+                  <input type="text" [value]="readonlyName" readonly>
+                </label>
+                <label class="form-field">
+                  <span class="label font-hermione">Email</span>
+                  <input type="email" [value]="readonlyEmail" readonly>
+                </label>
+              </div>
+
+              <div class="form-row three">
+                <label class="form-field">
+                  <span class="label font-hermione">Phone number</span>
+                  <input type="text" [(ngModel)]="profileForm.phoneNumber" name="phoneNumber" placeholder="Add your phone">
+                </label>
+                <label class="form-field">
+                  <span class="label font-hermione">Title</span>
+                  <input type="text" [(ngModel)]="profileForm.title" name="title" placeholder="Your title">
+                </label>
+                <label class="form-field">
+                  <span class="label font-hermione">Hourly rate (MAD)</span>
+                  <input type="number" min="0" step="10" [(ngModel)]="profileForm.hourlyRate" name="hourlyRate">
+                </label>
+              </div>
+
+              <div class="form-row">
+                <label class="form-field">
+                  <span class="label font-hermione">Summary</span>
+                  <textarea rows="4" [(ngModel)]="profileForm.summary" name="summary" placeholder="Tell recruiters about your focus and strengths"></textarea>
+                </label>
+              </div>
+
+              <div class="profile-actions">
+                <button class="primary-btn font-maglite" [disabled]="profileLoading" (click)="saveProfile()">
+                  @if (profileLoading) { Saving... } @else { Save changes }
+                </button>
+                <button class="ghost-btn font-maglite" type="button" (click)="loadProfile()">Reset</button>
+              </div>
+            </div>
+          }
+        </section>
+      }
+
+      @if (activeTab === 'missions') {
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow font-hermione">My Missions</p>
+              <h2 class="font-maglite">Current engagements</h2>
+            </div>
+            <button class="text-link font-maglite" (click)="goToMissions()">Find more</button>
+          </div>
+          <div class="cards-grid">
+            @for (mission of activeMissions; track mission.title) {
+              <article class="card">
+                <div class="card-top">
+                  <h3 class="font-maglite">{{ mission.title }}</h3>
+                  <span class="chip font-hermione">{{ mission.status }}</span>
+                </div>
+                <p class="meta font-hermione">{{ mission.due }}</p>
+                <div class="budget font-maglite">{{ mission.budget }}</div>
+                <div class="progress">
+                  <div class="bar" [style.width.%]="mission.progress"></div>
+                </div>
+                <div class="progress-label font-hermione">{{ mission.progress }}% done</div>
+              </article>
+            }
+          </div>
+        </section>
+      }
+
+      @if (activeTab === 'proposals') {
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow font-hermione">Proposals</p>
+              <h2 class="font-maglite">My proposals</h2>
+            </div>
+            <button class="text-link font-maglite" (click)="goToMissions()">Find missions</button>
+          </div>
+          <div class="list">
+            @for (proposal of proposals; track proposal.mission) {
+              <div class="list-item">
+                <div>
+                  <h3 class="font-maglite">{{ proposal.mission }}</h3>
+                  <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
+                </div>
+                <span class="chip muted font-hermione">{{ proposal.status }}</span>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      @if (activeTab === 'messages') {
+        <section class="panel messages-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow font-hermione">Messages</p>
+              <h2 class="font-maglite">Inbox</h2>
+            </div>
+          </div>
+
+          <div class="messages-layout">
+            <div class="conversation-list">
+              @for (thread of messageThreads; track thread.id) {
+                <button type="button" class="conversation-row" [class.active]="thread.id === selectedThread?.id" (click)="selectThread(thread.id)">
+                  <div class="conversation-main">
+                    <h3 class="font-maglite">{{ thread.participant }}</h3>
+                    <p class="meta font-hermione">{{ thread.mission }}</p>
+                    <p class="meta font-hermione ellipsis">{{ getLastMessage(thread)?.text || 'Start a conversation' }}</p>
+                  </div>
+                  <div class="conversation-meta">
+                    <span class="meta font-hermione">{{ getLastMessage(thread)?.time || 'Now' }}</span>
+                    @if (thread.unread) {
+                      <span class="chip font-hermione">New</span>
+                    }
+                  </div>
+                </button>
+              }
+            </div>
+
+            @if (selectedThread) {
+              <div class="conversation-thread">
+                <div class="thread-header">
+                  <div>
+                    <p class="eyebrow font-hermione">Chat</p>
+                    <h3 class="font-maglite">{{ selectedThread.participant }}</h3>
+                    <p class="meta font-hermione">{{ selectedThread.mission }}</p>
+                  </div>
+                  <span class="chip muted font-hermione">{{ selectedThread.role === 'recruiter' ? 'Recruiter' : 'Partner' }}</span>
+                </div>
+
+                <div class="thread-messages">
+                  @for (msg of selectedThread.messages; track msg.id) {
+                    <div class="bubble" [class.me]="msg.from === 'me'">
+                      <p class="font-hermione">{{ msg.text }}</p>
+                      <span class="meta font-hermione time">{{ msg.time }}</span>
+                    </div>
+                  }
+                </div>
+
+                <form class="message-composer" (ngSubmit)="sendMessage()">
+                  <input type="text" [(ngModel)]="draftMessage" name="draftMessage" placeholder="Write a message" aria-label="Message input">
+                  <button class="primary-btn font-maglite" type="submit">Send</button>
+                </form>
+              </div>
+            } @else {
+              <div class="state-block muted">
+                <p class="font-hermione">Select a conversation to start messaging.</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </main>
+  </div>
+</div>

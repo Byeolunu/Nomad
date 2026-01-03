@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#483D8B" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <rect x="120" y="160" width="30" height="40"/>
+    <rect x="160" y="130" width="30" height="70"/>
+    <rect x="200" y="100" width="30" height="100"/>
+    <rect x="240" y="80" width="30" height="120"/>
+    <path d="M120 70 L160 90 L200 60 L240 40 L280 55" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="120" cy="70" r="5"/>
+    <circle cx="160" cy="90" r="5"/>
+    <circle cx="200" cy="60" r="5"/>
+    <circle cx="240" cy="40" r="5"/>
+    <circle cx="280" cy="55" r="5"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Finance Dashboard</text>
+</svg>

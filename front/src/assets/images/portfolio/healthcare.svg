@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#B53572" width="400" height="300"/>
+  <g fill="#fff">
+    <rect x="175" y="80" width="50" height="120" rx="4"/>
+    <rect x="140" y="115" width="120" height="50" rx="4"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Healthcare</text>
+</svg>

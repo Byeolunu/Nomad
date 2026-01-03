@@ -1,0 +1,154 @@
+<div class="hire-page">
+  <div class="hire-container">
+    <button class="back-btn font-maglite" (click)="goBack()">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Back to Profile
+    </button>
+    @if (isLoading) {
+      <div class="loading-card">
+        <div class="loading-spinner"></div>
+        <p class="font-hermione">Loading...</p>
+      </div>
+    } @else if (freelancer) {
+      <div class="hire-layout">
+        <aside class="freelancer-sidebar">
+          <div class="freelancer-card">
+            <div class="freelancer-avatar">
+              <span class="font-maglite">{{ freelancer.avatar }}</span>
+            </div>
+            <h3 class="freelancer-name font-maglite">{{ freelancer.name }}</h3>
+            <p class="freelancer-title font-hermione">{{ freelancer.title }}</p>
+            <div class="freelancer-rating">
+              <svg class="star-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              <span class="font-hermione">{{ freelancer.rating }} ({{ freelancer.reviewCount }} reviews)</span>
+            </div>
+            <div class="freelancer-rate">
+              <span class="rate-label font-hermione">Hourly Rate</span>
+              <span class="rate-value font-maglite">{{ freelancer.hourlyRate }} MAD</span>
+            </div>
+            <div class="freelancer-skills">
+              <span class="skills-label font-hermione">Skills</span>
+              <div class="skills-list">
+                @for (skill of freelancer.skills.slice(0, 5); track skill) {
+                  <span class="skill-tag font-hermione">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </aside>
+        <main class="hire-main">
+          <div class="form-card">
+            <div class="form-header">
+              <h2 class="form-title font-maglite">Hire {{ freelancer.name }}</h2>
+              <p class="form-subtitle font-hermione">Send a hiring request with project details</p>
+            </div>
+            @if (successMessage) {
+              <div class="alert alert-success font-hermione">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                {{ successMessage }}
+              </div>
+            }
+            @if (errorMessage) {
+              <div class="alert alert-error font-hermione">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                {{ errorMessage }}
+              </div>
+            }
+            <form (ngSubmit)="onSubmit()" class="hire-form">
+              <div class="form-group">
+                <label for="title" class="form-label font-maglite">Project Title *</label>
+                <input 
+                  type="text" 
+                  id="title" 
+                  [(ngModel)]="contract.title" 
+                  name="title"
+                  class="form-input font-hermione"
+                  placeholder="e.g., Build E-commerce Website"
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="description" class="form-label font-maglite">Project Description *</label>
+                <textarea 
+                  id="description" 
+                  [(ngModel)]="contract.description" 
+                  name="description"
+                  class="form-textarea font-hermione"
+                  rows="5"
+                  placeholder="Describe the project, requirements, and expectations..."
+                  required></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="budget" class="form-label font-maglite">Budget (MAD) *</label>
+                  <input 
+                    type="number" 
+                    id="budget" 
+                    [(ngModel)]="contract.budget" 
+                    name="budget"
+                    class="form-input font-hermione"
+                    placeholder="5000"
+                    required>
+                </div>
+                <div class="form-group">
+                  <label for="mission" class="form-label font-maglite">Link to Mission (Optional)</label>
+                  <select 
+                    id="mission" 
+                    [(ngModel)]="contract.missionId" 
+                    name="missionId"
+                    class="form-select font-hermione">
+                    <option [ngValue]="null">-- No linked mission --</option>
+                    @for (mission of recruiterMissions; track mission.id) {
+                      <option [ngValue]="mission.id">{{ mission.title }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="startDate" class="form-label font-maglite">Start Date</label>
+                  <input 
+                    type="date" 
+                    id="startDate" 
+                    [(ngModel)]="contract.startDate" 
+                    name="startDate"
+                    class="form-input font-hermione">
+                </div>
+                <div class="form-group">
+                  <label for="endDate" class="form-label font-maglite">End Date</label>
+                  <input 
+                    type="date" 
+                    id="endDate" 
+                    [(ngModel)]="contract.endDate" 
+                    name="endDate"
+                    class="form-input font-hermione">
+                </div>
+              </div>
+              <button 
+                type="submit" 
+                class="submit-btn font-maglite"
+                [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                  <span class="btn-spinner"></span>
+                  Sending Request...
+                } @else {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                  </svg>
+                  Send Hiring Request
+                }
+              </button>
+            </form>
+          </div>
+        </main>
+      </div>
+    }
+  </div>
+</div>

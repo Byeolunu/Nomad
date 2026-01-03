@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#DC143C" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <circle cx="200" cy="110" r="45" fill="none" stroke="#fff" stroke-width="4"/>
+    <path d="M200 75 L200 110 L225 125" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+    <path d="M160 170 L180 150 L200 165 L220 145 L240 170" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Fitness Tracker</text>
+</svg>

@@ -1,0 +1,145 @@
+@if (isLoading) {
+  <div class="loading-page">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <p class="font-hermione">Loading mission details...</p>
+    </div>
+  </div>
+} @else if (mission) {
+  <div class="apply-page">
+    <div class="page-container">
+      <button class="back-btn font-maglite" (click)="goBack()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Mission
+      </button>
+      <div class="apply-layout">
+        <div class="mission-summary">
+          <div class="summary-card">
+            <div class="summary-header">
+              <div class="company-logo">
+                <span class="font-maglite">{{ mission.companyLogo }}</span>
+              </div>
+              <div class="summary-info">
+                <h2 class="summary-title font-maglite">{{ mission.title }}</h2>
+                <p class="summary-company font-hermione">{{ mission.company }}</p>
+              </div>
+            </div>
+            <div class="summary-details">
+              <div class="detail-item">
+                <span class="detail-label font-hermione">Budget</span>
+                <span class="detail-value font-maglite">{{ mission.budget }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label font-hermione">Category</span>
+                <span class="detail-value font-maglite">{{ mission.category }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label font-hermione">Applicants</span>
+                <span class="detail-value font-maglite">{{ mission.applicants }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-card">
+            <h1 class="form-title font-maglite">Submit Your Proposal</h1>
+            <p class="form-subtitle font-hermione">Tell the client why you're the best fit for this mission</p>
+            <form (ngSubmit)="onSubmit()" class="apply-form">
+              <div class="form-group">
+                <label class="form-label font-hermione">Cover Letter *</label>
+                <textarea 
+                  [(ngModel)]="application.coverLetter" 
+                  name="coverLetter"
+                  class="form-textarea font-hermione"
+                  placeholder="Introduce yourself and explain why you're the perfect candidate for this mission. Highlight relevant experience and how you plan to approach the project..."
+                  rows="8"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label font-hermione">Your Proposed Budget (MAD) *</label>
+                  <div class="input-with-icon">
+                    <span class="input-prefix font-hermione">MAD</span>
+                    <input 
+                      type="number" 
+                      [(ngModel)]="application.proposedBudget" 
+                      name="proposedBudget"
+                      class="form-input form-input-with-prefix font-hermione"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <p class="form-hint font-hermione">Client's budget: {{ mission.budget }}</p>
+                </div>
+                <div class="form-group">
+                  <label class="form-label font-hermione">Estimated Days to Complete</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="application.estimatedDays" 
+                    name="estimatedDays"
+                    class="form-input font-hermione"
+                    placeholder="e.g., 30"
+                    min="1"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label font-hermione">Additional Notes (Optional)</label>
+                <textarea 
+                  [(ngModel)]="application.additionalNotes" 
+                  name="additionalNotes"
+                  class="form-textarea font-hermione"
+                  placeholder="Any questions for the client or additional information you'd like to share..."
+                  rows="3"
+                ></textarea>
+              </div>
+              @if (errorMessage) {
+                <div class="alert alert-error">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p class="font-hermione">{{ errorMessage }}</p>
+                </div>
+              }
+              @if (successMessage) {
+                <div class="alert alert-success">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p class="font-hermione">{{ successMessage }}</p>
+                </div>
+              }
+              <button 
+                type="submit" 
+                class="submit-btn font-maglite"
+                [disabled]="isSubmitting"
+              >
+                @if (isSubmitting) {
+                  <span class="loading-spinner"></span>
+                  Submitting...
+                } @else {
+                  Submit Application
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                  </svg>
+                }
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="error-page">
+    <div class="error-card">
+      <h2 class="font-maglite">Mission not found</h2>
+      <button class="back-btn font-maglite" (click)="goBack()">
+        Back to Missions
+      </button>
+    </div>
+  </div>
+}

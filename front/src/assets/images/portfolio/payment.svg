@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#228B22" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <circle cx="200" cy="110" r="50" fill="none" stroke="#fff" stroke-width="4"/>
+    <text x="200" y="125" font-size="40" text-anchor="middle" font-family="Arial, sans-serif">$</text>
+    <path d="M150 170 L170 180 L190 165 L210 185 L230 160 L250 175" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Payment Gateway</text>
+</svg>

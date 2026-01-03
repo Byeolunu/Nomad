@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#4169E1" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <ellipse cx="200" cy="120" rx="70" ry="40"/>
+    <ellipse cx="150" cy="130" rx="40" ry="30"/>
+    <ellipse cx="250" cy="130" rx="40" ry="30"/>
+    <rect x="160" y="140" width="80" height="50" fill="#4169E1"/>
+    <path d="M175 170 L175 190 M200 170 L200 190 M225 170 L225 190" stroke="#fff" stroke-width="3" stroke-dasharray="5,5"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">Cloud Migration</text>
+</svg>

@@ -1,0 +1,257 @@
+<div class="home-container">
+  <section class="hero-section">
+    <app-zellij-pattern [opacity]="0.04" [className]="'hero-pattern'"></app-zellij-pattern>
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-tagline font-hermione">Morocco's Premier Freelance Platform</span>
+        <h1 class="hero-title font-maglite">
+          Where Talent<br/>Meets Opportunity
+        </h1>
+        <p class="hero-description font-hermione">
+          Connect with exceptional Moroccan freelancers. Build your dream team.
+        </p>
+        <form (ngSubmit)="handleSearch($event)" class="search-form">
+          <div class="search-container">
+            <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search skills, categories..."
+              [(ngModel)]="searchQuery"
+              name="search"
+              class="search-input font-hermione"
+            />
+            <button type="submit" class="search-btn font-maglite">
+              Search
+            </button>
+          </div>
+        </form>
+        <div class="hero-actions">
+          @if (!isLoggedIn) {
+            <button class="btn-primary font-maglite" (click)="navigateToSignup()">
+              Join as Freelancer
+              <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </button>
+            <button class="btn-outline font-maglite" (click)="navigateToSignup()">
+              Post a Mission
+            </button>
+          } @else if (userRole === 'FREELANCER') {
+            <button class="btn-primary font-maglite" (click)="navigateToMissions()">
+              Find Missions
+              <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </button>
+            <button class="btn-outline font-maglite" (click)="navigateToDashboard()">
+              My Dashboard
+            </button>
+          } @else if (userRole === 'RECRUITER') {
+            <button class="btn-primary font-maglite" (click)="navigateToDashboard()">
+              My Missions
+              <svg class="btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+              </svg>
+            </button>
+            <button class="btn-outline font-maglite" (click)="navigateToFreelancers()">
+              Browse Freelancers
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="hero-decoration">
+      <div class="deco-circle"></div>
+      <div class="deco-line"></div>
+    </div>
+  </section>
+  <section class="categories-section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag font-hermione">Explore</span>
+        <h2 class="section-title font-maglite">Categories</h2>
+      </div>
+    </div>
+    <div class="categories-carousel">
+      <div class="categories-track">
+        @for (category of categories; track category.name) {
+          <div class="category-card" (click)="navigateToMissions()">
+            <div class="category-icon">
+              <span>{{ getIcon(category.icon) }}</span>
+            </div>
+            <h3 class="category-name font-maglite">{{ category.name }}</h3>
+            <p class="category-count font-hermione">{{ category.count }} missions</p>
+          </div>
+        }
+        @for (category of categories; track category.name + '-dup') {
+          <div class="category-card" (click)="navigateToMissions()">
+            <div class="category-icon">
+              <span>{{ getIcon(category.icon) }}</span>
+            </div>
+            <h3 class="category-name font-maglite">{{ category.name }}</h3>
+            <p class="category-count font-hermione">{{ category.count }} missions</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+  <section class="steps-section">
+    <app-zellij-pattern [opacity]="0.03" [className]="'steps-pattern'"></app-zellij-pattern>
+    <div class="section-container">
+      <div class="section-header section-header-light">
+        <span class="section-tag font-hermione">Process</span>
+        <h2 class="section-title font-maglite">How It Works</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-number font-maglite">01</div>
+          <h3 class="step-title font-maglite">Post</h3>
+          <p class="step-desc font-hermione">
+            Describe your project and set your budget
+          </p>
+        </div>
+        <div class="step-divider"></div>
+        <div class="step-item">
+          <div class="step-number font-maglite">02</div>
+          <h3 class="step-title font-maglite">Review</h3>
+          <p class="step-desc font-hermione">
+            Receive proposals and choose the best fit
+          </p>
+        </div>
+        <div class="step-divider"></div>
+        <div class="step-item">
+          <div class="step-number font-maglite">03</div>
+          <h3 class="step-title font-maglite">Collaborate</h3>
+          <p class="step-desc font-hermione">
+            Work together and complete your project
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="features-section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag font-hermione">Benefits</span>
+        <h2 class="section-title font-maglite">Why Nomad</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title font-maglite">Trust & Security</h3>
+          <p class="feature-desc font-hermione">
+            Verified profiles and secure payments for peace of mind
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-alt">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title font-maglite">Local Focus</h3>
+          <p class="feature-desc font-hermione">
+            Built for the Moroccan market and culture
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-green">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title font-maglite">Simple & Efficient</h3>
+          <p class="feature-desc font-hermione">
+            Intuitive design for effortless workflow
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="testimonials-section">
+    <app-zellij-pattern [opacity]="1" [className]="'testimonials-pattern'"></app-zellij-pattern>
+    <div class="section-container">
+      <div class="section-header section-header-light">
+        <span class="section-tag font-hermione">Testimonials</span>
+        <h2 class="section-title font-maglite">What They Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        @for (testimonial of testimonials; track testimonial.id) {
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              @for (star of [].constructor(testimonial.rating); track $index) {
+                <svg viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+              }
+            </div>
+            <p class="testimonial-text font-hermione">"{{ testimonial.comment }}"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar font-maglite">
+                {{ testimonial.avatar }}
+              </div>
+              <div class="author-info">
+                <p class="author-name font-maglite">{{ testimonial.name }}</p>
+                <p class="author-role font-hermione">{{ testimonial.role }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+  <section class="cta-section">
+    <div class="cta-content">
+      @if (!isLoggedIn) {
+        <h2 class="cta-title font-maglite">Ready to Begin?</h2>
+        <p class="cta-desc font-hermione">
+          Join Morocco's leading freelance community today
+        </p>
+        <div class="cta-actions">
+          <button class="cta-btn-primary font-maglite" (click)="navigateToSignup()">
+            Get Started
+          </button>
+          <button class="cta-btn-secondary font-maglite" (click)="navigateToMissions()">
+            Browse Missions
+          </button>
+        </div>
+      } @else if (userRole === 'FREELANCER') {
+        <h2 class="cta-title font-maglite">Find Your Next Project</h2>
+        <p class="cta-desc font-hermione">
+          Explore exciting opportunities waiting for you
+        </p>
+        <div class="cta-actions">
+          <button class="cta-btn-primary font-maglite" (click)="navigateToMissions()">
+            Browse Missions
+          </button>
+          <button class="cta-btn-secondary font-maglite" (click)="navigateToDashboard()">
+            My Dashboard
+          </button>
+        </div>
+      } @else if (userRole === 'RECRUITER') {
+        <h2 class="cta-title font-maglite">Find Top Talent</h2>
+        <p class="cta-desc font-hermione">
+          Connect with Morocco's best freelancers
+        </p>
+        <div class="cta-actions">
+          <button class="cta-btn-primary font-maglite" (click)="navigateToPostMission()">
+            Post a Mission
+          </button>
+          <button class="cta-btn-secondary font-maglite" (click)="navigateToFreelancers()">
+            Browse Freelancers
+          </button>
+        </div>
+      }
+    </div>
+    <div class="cta-decoration">
+      <app-zellij-pattern [opacity]="0.06" [className]="'cta-pattern'"></app-zellij-pattern>
+    </div>
+  </section>
+</div>

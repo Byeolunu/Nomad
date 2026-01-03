@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect fill="#800080" width="400" height="300"/>
+  <g fill="#fff" opacity="0.9">
+    <rect x="120" y="70" width="60" height="60" rx="8"/>
+    <rect x="220" y="70" width="60" height="60" rx="8"/>
+    <rect x="170" y="150" width="60" height="60" rx="8"/>
+    <line x1="165" y1="100" x2="220" y2="100" stroke="#fff" stroke-width="3"/>
+    <line x1="180" y1="130" x2="200" y2="150" stroke="#fff" stroke-width="3"/>
+    <line x1="220" y1="130" x2="200" y2="150" stroke="#fff" stroke-width="3"/>
+  </g>
+  <text x="200" y="250" fill="#fff" font-size="18" text-anchor="middle" font-family="Arial, sans-serif">API Platform</text>
+</svg>
