@@ -12,7 +12,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #faf9f6 0%, #f5f3ef 100%);
+  background-image: linear-gradient(rgba(251, 234, 234, 0.9), rgba(248, 233, 233, 0.9)), url('/assets/images/zellige3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   overflow: hidden;
   padding: 6rem 2rem;
 }
@@ -28,10 +32,11 @@
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.3em;
-  color: #B53572;
+  color: #57011A;
+  opacity: 0.95;
   margin-bottom: 1.5rem;
   padding: 0.5rem 1.5rem;
-  border: 1px solid #B53572;
+  border: 1px solid #57011A;
   border-radius: 50px;
 }
 .hero-title {
@@ -43,8 +48,8 @@
 }
 .hero-description {
   font-size: 1.25rem;
-  color: #70050D;
-  opacity: 0.7;
+  color: #57011A;
+  opacity: 0.9;
   max-width: 500px;
   margin: 0 auto 3rem;
   line-height: 1.6;
@@ -154,20 +159,8 @@
   transform: translateY(-50%);
   z-index: 1;
 }
-.deco-circle {
-  width: 300px;
-  height: 300px;
-  border: 1px solid rgba(181, 53, 114, 0.15);
-  border-radius: 50%;
-}
-.deco-line {
-  position: absolute;
-  width: 1px;
-  height: 150px;
-  background: linear-gradient(to bottom, transparent, #B53572, transparent);
-  left: 50%;
-  top: -80px;
-}
+
+
 .categories-section {
   padding: 8rem 0;
   background: #fff;
@@ -184,7 +177,7 @@
 }
 .section-tag {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.25em;
   color: #B53572;
@@ -367,7 +360,11 @@
 .testimonials-section {
   position: relative;
   padding: 8rem 2rem;
-  background: #657A42;
+  background-image: linear-gradient(rgba(10, 72, 51, 0.9), rgba(10, 72, 51, 0.7)), url('/assets/images/zellige2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   overflow: hidden;
 }
 .testimonials-grid {
