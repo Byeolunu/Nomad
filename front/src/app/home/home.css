@@ -18,7 +18,7 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   overflow: hidden;
-  padding: 6rem 2rem;
+  padding: 1rem 2rem;
 }
 .hero-content {
   max-width: 900px;
@@ -370,7 +370,7 @@
 .testimonials-section {
   position: relative;
   padding: 8rem 2rem;
-  background-image: linear-gradient(rgba(10, 72, 51, 0.9), rgba(10, 72, 51, 0.7)), url('/assets/images/zelligeGreen.jpg');
+  background-image: linear-gradient(rgba(10, 72, 51, 0.95), rgba(10, 72, 51, 0.95)), url('/assets/images/zelligeGreen.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

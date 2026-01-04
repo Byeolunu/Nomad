@@ -1,0 +1,33 @@
+<footer class="footer">
+  <div class="footer-top">
+    <div class="brand">
+      <div class="brand-mark font-maglite">Nomad</div>
+      <p class="brand-copy font-hermione">Connect with exceptional Moroccan freelancers. Build your dream team.</p>
+    </div>
+    <div class="link-group">
+      <h3 class="group-title font-maglite">Explore</h3>
+      <nav class="link-list">
+        @for (link of quickLinks; track link.label) {
+          <a class="footer-link font-hermione" [routerLink]="link.path">{{ link.label }}</a>
+        }
+      </nav>
+    </div>
+    <div class="link-group">
+      <h3 class="group-title font-maglite">Account</h3>
+      <nav class="link-list">
+        @for (link of accountLinks; track link.label) {
+          <a class="footer-link font-hermione" [routerLink]="link.path">{{ link.label }}</a>
+        }
+      </nav>
+    </div>
+    <div class="contact">
+      <h3 class="group-title font-maglite">Contact</h3>
+      <p class="contact-item font-hermione">{{ contactEmail }}</p>
+      <p class="contact-item font-hermione">{{ contactPhone }}</p>
+      <button class="cta font-hermione" [routerLink]="'/signup'">Join Nomad</button>
+    </div>
+  </div>
+  <div class="footer-bottom font-hermione">
+    <span>© {{ currentYear }} Nomad. All rights reserved.</span>
+  </div>
+</footer>

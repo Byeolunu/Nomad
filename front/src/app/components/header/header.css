@@ -24,7 +24,7 @@
 .nav-link {
   color: #FBD217;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.2rem;
   transition: opacity 0.2s ease;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
 .sign-in-link {
   color: #FBD217;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
   transition: opacity 0.2s ease;
 }
 .sign-in-link:hover {
@@ -68,7 +68,7 @@
   border: 1px solid #FBD217;
   border-radius: 8px;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
   transition: all 0.2s ease;
 }
 .register-btn:hover {
