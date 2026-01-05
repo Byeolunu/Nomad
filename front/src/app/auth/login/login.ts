@@ -16,9 +16,14 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   email = '';
   password = '';
+  showPassword = false;
   errorMessage = '';
   successMessage = '';
   constructor(private authService: AuthService, private router: Router) {}
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   onLogin() {
     console.log('Attempting login with:', this.email);

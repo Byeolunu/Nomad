@@ -135,6 +135,11 @@
   flex-direction: column;
   gap: 1.25rem;
 }
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
 .form-group {
   display: flex;
   flex-direction: column;
@@ -147,6 +152,10 @@
 }
 .input-wrapper {
   position: relative;
+}
+.password-wrapper {
+  display: flex;
+  align-items: center;
 }
 .input-icon {
   position: absolute;
@@ -188,6 +197,30 @@
   font-size: 0.8rem;
   color: #BF152C;
   margin-top: 0.25rem;
+}
+.toggle-password-btn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #70050D;
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+.toggle-password-btn.visible {
+  opacity: 1;
+}
+.toggle-password-btn:focus {
+  outline: none;
+}
+.toggle-password-btn svg {
+  width: 20px;
+  height: 20px;
 }
 .role-selector {
   display: grid;

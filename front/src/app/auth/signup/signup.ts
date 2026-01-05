@@ -14,16 +14,23 @@ import { FormsModule } from '@angular/forms';
   ]
 })
 export class SignupComponent {
+  firstName = '';
+  lastName = '';
   email = '';
   password = '';
+  showPassword = false;
   role = 'FREELANCER';
   message = '';
   successMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSignup() {
-    console.log('Attempting signup:', this.email, this.role);
+    console.log('Attempting signup:', this.firstName, this.lastName, this.email, this.role);
     this.authService.signup(this.email, this.password, this.role).subscribe({
       next: (response) => {
         this.successMessage='Signup successful! You can login now.';

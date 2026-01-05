@@ -148,6 +148,34 @@
 .input-wrapper {
   position: relative;
 }
+.password-wrapper {
+  display: flex;
+  align-items: center;
+}
+.toggle-password-btn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #70050D;
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+.toggle-password-btn.visible {
+  opacity: 1;
+}
+.toggle-password-btn:focus {
+  outline: none;
+}
+.toggle-password-btn svg {
+  width: 20px;
+  height: 20px;
+}
 .input-icon {
   position: absolute;
   left: 1rem;
