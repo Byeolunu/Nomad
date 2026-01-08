@@ -12,7 +12,7 @@ public class ContractManager implements ContractService {
     private ContractRepository contractRepository;
     @Override
     public Contract createContract(Contract contract) {
-        contract.setStatus(ContractStatus.PENDING);
+        contract.setStatus(ContractStatus.IN_PROGRESS);
         return contractRepository.save(contract);
     }
     @Override

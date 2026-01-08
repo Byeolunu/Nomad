@@ -34,9 +34,9 @@ export class AuthService {
       );
   }
 
-  signup(email: string, password: string, role: string) {
+  signup(email: string, password: string, role: string, firstName: string, lastName: string) {
     const endpoint = role === 'RECRUITER' ? 'register/recruiter' : 'register/freelancer';
-    return this.http.post(`${this.apiUrl}/${endpoint}`, { email, password, role });
+    return this.http.post(`${this.apiUrl}/${endpoint}`, { email, password, role, firstName, lastName });
   }
 
   logout() {

@@ -47,7 +47,7 @@ public class ContractController {
             contract.setDescription((String) contractData.get("description"));
             contract.setBudget(contractData.get("budget") != null 
                     ? Double.valueOf(contractData.get("budget").toString()) : null);
-            contract.setStatus(ContractStatus.PENDING);
+            contract.setStatus(ContractStatus.IN_PROGRESS);
             if (contractData.get("missionId") != null) {
                 Long missionId = Long.valueOf(contractData.get("missionId").toString());
                 Mission mission = missionRepository.findById(missionId).orElse(null);

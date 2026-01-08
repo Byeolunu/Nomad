@@ -106,11 +106,7 @@ export class RecruiterDashboardComponent implements OnInit {
   selectedThreadId: number | null = null;
   draftMessage = '';
 
-  proposals = [
-    { id: 1, mission: 'UI revamp for marketplace', freelancer: 'Sara K.', budget: '15,000 MAD', status: 'Pending', submitted: '2d ago' },
-    { id: 2, mission: 'Mobile onboarding flow', freelancer: 'Adil R.', budget: '12,500 MAD', status: 'Reviewed', submitted: '4d ago' },
-    { id: 3, mission: 'Data dashboard', freelancer: 'Mina L.', budget: '18,000 MAD', status: 'Shortlisted', submitted: '1w ago' }
-  ];
+  proposalsLoading = false;
 
   companyProfile = {
     name: 'TechMorocco',
@@ -187,6 +183,31 @@ export class RecruiterDashboardComponent implements OnInit {
     return this.selectedMission.applications.filter(app => app.status === 'PENDING').length;
   }
 
+  get allProposals(): any[] {
+    // Aggregate all applications from all missions into a flat list for the proposals tab
+    const proposals: any[] = [];
+    for (const mission of this.missions) {
+      if (mission.applications && Array.isArray(mission.applications)) {
+        for (const app of mission.applications) {
+          proposals.push({
+            id: app.id,
+            mission: mission.title,
+            missionId: mission.id,
+            freelancer: `${app.freelancer.firstName} ${app.freelancer.lastName}`,
+            freelancerEmail: app.freelancer.email,
+            budget: app.proposedBudget ? `${app.proposedBudget} MAD` : 'Not specified',
+            status: app.status,
+            submitted: this.formatTimeAgo(app.appliedDate),
+            appliedDate: app.appliedDate,
+            coverLetter: app.coverLetter,
+            estimatedDays: app.estimatedDays
+          });
+        }
+      }
+    }
+    return proposals;
+  }
+
   setTab(tab: typeof this.activeTab): void {
     this.activeTab = tab;
   }
@@ -205,6 +226,8 @@ export class RecruiterDashboardComponent implements OnInit {
       .subscribe({
         next: (missions) => {
           this.missions = missions;
+          // Load applications for all missions
+          this.loadAllApplications();
           this.isLoading = false;
         },
         error: (err) => {
@@ -213,6 +236,41 @@ export class RecruiterDashboardComponent implements OnInit {
           this.isLoading = false;
         }
       });
+  }
+
+  loadAllApplications(): void {
+    // Load applications for each mission
+    for (const mission of this.missions) {
+      this.http.get<Application[]>(`http://localhost:8090/api/applications/mission/${mission.id}/proposals`, { headers: this.getAuthHeaders() })
+        .subscribe({
+          next: (response: any) => {
+            if (response.success && response.proposals) {
+              mission.applications = response.proposals.map((prop: any) => ({
+                id: prop.id,
+                coverLetter: prop.coverLetter,
+                proposedBudget: prop.proposedBudget,
+                estimatedDays: prop.estimatedDays,
+                additionalNotes: prop.additionalNotes,
+                status: prop.status,
+                appliedDate: prop.appliedDate,
+                freelancer: {
+                  id: prop.freelancerId,
+                  firstName: prop.freelancerName?.split(' ')[0] || 'Unknown',
+                  lastName: prop.freelancerName?.split(' ')[1] || '',
+                  email: prop.freelancerEmail,
+                  title: 'Freelancer',
+                  hourlyRate: 0
+                }
+              }));
+              console.log(`Loaded ${response.proposals.length} proposals for mission ${mission.id}`);
+            }
+          },
+          error: (err) => {
+            console.error(`Error loading applications for mission ${mission.id}:`, err);
+            mission.applications = [];
+          }
+        });
+    }
   }
 
   selectMission(mission: Mission): void {
@@ -266,6 +324,86 @@ export class RecruiterDashboardComponent implements OnInit {
     this.updateApplicationStatus(applicationId, 'REJECTED');
   }
 
+  acceptProposal(proposalId: number): void {
+    this.processingApplicationId = proposalId;
+    console.log('Accepting proposal:', proposalId);
+    
+    this.http.put<any>(
+      `http://localhost:8090/api/applications/${proposalId}/accept`,
+      {},
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (response) => {
+        console.log('Proposal accepted successfully:', response);
+        
+        // Update the proposal in the allProposals list
+        const proposal = this.allProposals.find(p => p.id === proposalId);
+        if (proposal) {
+          proposal.status = 'ACCEPTED';
+          console.log('Updated proposal status to ACCEPTED');
+        }
+        
+        // Also update in missions applications
+        for (const mission of this.missions) {
+          if (mission.applications) {
+            const app = mission.applications.find(a => a.id === proposalId);
+            if (app) {
+              app.status = 'ACCEPTED';
+              console.log('Updated application status in mission:', mission.title);
+            }
+          }
+        }
+        
+        this.processingApplicationId = null;
+      },
+      error: (err) => {
+        console.error('Error accepting proposal:', err);
+        alert('Failed to accept proposal');
+        this.processingApplicationId = null;
+      }
+    });
+  }
+
+  rejectProposal(proposalId: number): void {
+    this.processingApplicationId = proposalId;
+    console.log('Rejecting proposal:', proposalId);
+    
+    this.http.put<any>(
+      `http://localhost:8090/api/applications/${proposalId}/reject`,
+      {},
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (response) => {
+        console.log('Proposal rejected successfully:', response);
+        
+        // Update the proposal in the allProposals list
+        const proposal = this.allProposals.find(p => p.id === proposalId);
+        if (proposal) {
+          proposal.status = 'REJECTED';
+          console.log('Updated proposal status to REJECTED');
+        }
+        
+        // Also update in missions applications
+        for (const mission of this.missions) {
+          if (mission.applications) {
+            const app = mission.applications.find(a => a.id === proposalId);
+            if (app) {
+              app.status = 'REJECTED';
+              console.log('Updated application status in mission:', mission.title);
+            }
+          }
+        }
+        
+        this.processingApplicationId = null;
+      },
+      error: (err) => {
+        console.error('Error rejecting proposal:', err);
+        alert('Failed to reject proposal');
+        this.processingApplicationId = null;
+      }
+    });
+  }
+
   getStatusClass(status: string): string {
     switch (status) {
       case 'ACCEPTED': return 'status-accepted';
@@ -304,6 +442,22 @@ export class RecruiterDashboardComponent implements OnInit {
   getLastMessage(thread: ConversationThread): ChatMessage | null {
     if (!thread.messages.length) return null;
     return thread.messages[thread.messages.length - 1];
+  }
+
+  private formatTimeAgo(dateString: string): string {
+    if (!dateString) return 'Recently';
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const secondsAgo = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (secondsAgo < 60) return 'Just now';
+    if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)}m ago`;
+    if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)}h ago`;
+    if (secondsAgo < 604800) return `${Math.floor(secondsAgo / 86400)}d ago`;
+    
+    const weeks = Math.floor(secondsAgo / 604800);
+    return `${weeks}w ago`;
   }
 
   private formatTimeLabel(date: Date): string {

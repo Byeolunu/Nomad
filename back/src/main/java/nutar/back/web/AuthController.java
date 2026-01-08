@@ -36,12 +36,19 @@ public class AuthController {
         {
             return ResponseEntity.badRequest().body("Email already exists");
         }
+
+        String firstName = sanitizeName(request.getFirstName());
+        String lastName = sanitizeName(request.getLastName());
+        if (firstName.isEmpty() || lastName.isEmpty()) {
+            return ResponseEntity.badRequest().body("First name and last name are required");
+        }
+
         Freelancer freelancer = new Freelancer();
         freelancer.setEmail(request.getEmail());
         freelancer.setPassword(passwordEncoder.encode(request.getPassword()));
         freelancer.setUsername(request.getEmail());
-        freelancer.setFirstName("User");
-        freelancer.setLastName("Freelancer");
+        freelancer.setFirstName(firstName);
+        freelancer.setLastName(lastName);
         freelancer.setRole(Role.FREELANCER);
         Freelancer savedFreelancer = userRepository.save(freelancer);
         return ResponseEntity.ok(savedFreelancer);
@@ -51,12 +58,19 @@ public class AuthController {
         if (userRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
+
+        String firstName = sanitizeName(request.getFirstName());
+        String lastName = sanitizeName(request.getLastName());
+        if (firstName.isEmpty() || lastName.isEmpty()) {
+            return ResponseEntity.badRequest().body("First name and last name are required");
+        }
+
         Recruiter recruiter = new Recruiter();
         recruiter.setEmail(request.getEmail());
         recruiter.setPassword(passwordEncoder.encode(request.getPassword()));
         recruiter.setUsername(request.getEmail());
-        recruiter.setFirstName("User");
-        recruiter.setLastName("Recruiter");
+        recruiter.setFirstName(firstName);
+        recruiter.setLastName(lastName);
         recruiter.setRole(Role.RECRUITER);
         Recruiter savedRecruiter = userRepository.save(recruiter);
         return ResponseEntity.ok(savedRecruiter);
@@ -80,7 +94,12 @@ public class AuthController {
                     .findFirst()
                     .map(auth -> auth.getAuthority())
                     .orElse("FREELANCER");
-            return ResponseEntity.ok(new AuthResponse(token,role));
+            
+            // Get the user to retrieve ID
+            var user = userRepository.findByEmail(request.getEmail()).orElse(null);
+            Long userId = user != null ? user.getId() : null;
+            
+            return ResponseEntity.ok(new AuthResponse(token, role, userId, request.getEmail()));
         }
         catch (Exception e)
         {
@@ -118,7 +137,15 @@ public class AuthController {
     public static class AuthResponse {
         private final String token;
         private final String role;
-        public AuthResponse(String token,String role) { this.token = token; this.role = role; }
+        private final Long userId;
+        private final String email;
+        
+        public AuthResponse(String token, String role, Long userId, String email) { 
+            this.token = token; 
+            this.role = role; 
+            this.userId = userId;
+            this.email = email;
+        }
     }
     @Setter
     @Getter
@@ -126,5 +153,11 @@ public class AuthController {
         private String email;
         private String password;
         private String role;
+        private String firstName;
+        private String lastName;
+    }
+
+    private String sanitizeName(String name) {
+        return name == null ? "" : name.trim();
     }
 }

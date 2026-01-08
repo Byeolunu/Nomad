@@ -31,7 +31,7 @@ public class Contract {
     private String description;
     private Double budget;
     @Enumerated(EnumType.STRING)
-    private ContractStatus status = ContractStatus.PENDING;
+    private ContractStatus status = ContractStatus.IN_PROGRESS;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime createdAt;

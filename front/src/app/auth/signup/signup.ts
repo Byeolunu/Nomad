@@ -31,7 +31,7 @@ export class SignupComponent {
 
   onSignup() {
     console.log('Attempting signup:', this.firstName, this.lastName, this.email, this.role);
-    this.authService.signup(this.email, this.password, this.role).subscribe({
+    this.authService.signup(this.email, this.password, this.role, this.firstName, this.lastName).subscribe({
       next: (response) => {
         this.successMessage='Signup successful! You can login now.';
         console.log('Signup successful:', response);
