@@ -5,8 +5,8 @@
         <div class="avatar font-maglite">{{ getInitials() }}</div>
         <div>
           <p class="eyebrow font-hermione">Freelancer</p>
-          <h2 class="font-maglite">{{ getUserName() }}</h2>
-          <p class="email font-hermione">{{ userEmail }}</p>
+          <h2 class="font-maglite">{{ readonlyName }}</h2>
+          <p class="email font-hermione">{{ readonlyEmail }}</p>
         </div>
       </div>
 
@@ -59,19 +59,28 @@
             <button class="text-link font-maglite" (click)="setTab('missions')">View all</button>
           </div>
           <div class="cards-grid">
-            @for (mission of activeMissions; track mission.title) {
-              <article class="card">
-                <div class="card-top">
-                  <h3 class="font-maglite">{{ mission.title }}</h3>
-                  <span class="chip font-hermione">{{ mission.status }}</span>
-                </div>
-                <p class="meta font-hermione">{{ mission.due }}</p>
-                <div class="budget font-maglite">{{ mission.budget }}</div>
-                <div class="progress">
-                  <div class="bar" [style.width.%]="mission.progress"></div>
-                </div>
-                <div class="progress-label font-hermione">{{ mission.progress }}% done</div>
-              </article>
+            @if (missionsLoading) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>Loading missions...</p>
+              </div>
+            } @else if (missionsError) {
+              <div style="padding: 1rem; text-align: center; color: #d32f2f;">
+                <p>{{ missionsError }}</p>
+              </div>
+            } @else if (activeMissions.length === 0) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>No active missions yet. Start by applying to missions!</p>
+              </div>
+            } @else {
+              @for (mission of activeMissions; track mission.id) {
+                <article class="card">
+                  <div class="card-top">
+                    <h3 class="font-maglite">{{ mission.title }}</h3>
+                    <span class="chip font-hermione">{{ mission.status }}</span>
+                  </div>
+                  <div class="budget font-maglite">{{ mission.budget }}</div>
+                </article>
+              }
             }
           </div>
         </section>
@@ -85,14 +94,28 @@
               </div>
             </div>
             <div class="list">
-              @for (proposal of proposals; track proposal.mission) {
-                <div class="list-item">
-                  <div>
-                    <h3 class="font-maglite">{{ proposal.mission }}</h3>
-                    <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
-                  </div>
-                  <span class="chip muted font-hermione">{{ proposal.status }}</span>
+              @if (proposalsLoading) {
+                <div style="padding: 1rem; text-align: center; color: #999;">
+                  <p>Loading proposals...</p>
                 </div>
+              } @else if (proposalsError) {
+                <div style="padding: 1rem; text-align: center; color: #d32f2f;">
+                  <p>{{ proposalsError }}</p>
+                </div>
+              } @else if (proposals.length === 0) {
+                <div style="padding: 1rem; text-align: center; color: #999;">
+                  <p>No proposals yet. Start by applying to missions!</p>
+                </div>
+              } @else {
+                @for (proposal of proposals; track proposal.id) {
+                  <div class="list-item">
+                    <div>
+                      <h3 class="font-maglite">{{ proposal.mission }}</h3>
+                      <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
+                    </div>
+                    <span class="chip muted font-hermione">{{ proposal.status }}</span>
+                  </div>
+                }
               }
             </div>
           </div>
@@ -192,19 +215,28 @@
             <button class="text-link font-maglite" (click)="goToMissions()">Find more</button>
           </div>
           <div class="cards-grid">
-            @for (mission of activeMissions; track mission.title) {
-              <article class="card">
-                <div class="card-top">
-                  <h3 class="font-maglite">{{ mission.title }}</h3>
-                  <span class="chip font-hermione">{{ mission.status }}</span>
-                </div>
-                <p class="meta font-hermione">{{ mission.due }}</p>
-                <div class="budget font-maglite">{{ mission.budget }}</div>
-                <div class="progress">
-                  <div class="bar" [style.width.%]="mission.progress"></div>
-                </div>
-                <div class="progress-label font-hermione">{{ mission.progress }}% done</div>
-              </article>
+            @if (missionsLoading) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>Loading missions...</p>
+              </div>
+            } @else if (missionsError) {
+              <div style="padding: 1rem; text-align: center; color: #d32f2f;">
+                <p>{{ missionsError }}</p>
+              </div>
+            } @else if (activeMissions.length === 0) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>No active missions yet. Start by applying to missions!</p>
+              </div>
+            } @else {
+              @for (mission of activeMissions; track mission.id) {
+                <article class="card">
+                  <div class="card-top">
+                    <h3 class="font-maglite">{{ mission.title }}</h3>
+                    <span class="chip font-hermione">{{ mission.status }}</span>
+                  </div>
+                  <div class="budget font-maglite">{{ mission.budget }}</div>
+                </article>
+              }
             }
           </div>
         </section>
@@ -220,14 +252,28 @@
             <button class="text-link font-maglite" (click)="goToMissions()">Find missions</button>
           </div>
           <div class="list">
-            @for (proposal of proposals; track proposal.mission) {
-              <div class="list-item">
-                <div>
-                  <h3 class="font-maglite">{{ proposal.mission }}</h3>
-                  <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
-                </div>
-                <span class="chip muted font-hermione">{{ proposal.status }}</span>
+            @if (proposalsLoading) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>Loading proposals...</p>
               </div>
+            } @else if (proposalsError) {
+              <div style="padding: 1rem; text-align: center; color: #d32f2f;">
+                <p>{{ proposalsError }}</p>
+              </div>
+            } @else if (proposals.length === 0) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>No proposals yet. Start by applying to missions!</p>
+              </div>
+            } @else {
+              @for (proposal of proposals; track proposal.id) {
+                <div class="list-item">
+                  <div>
+                    <h3 class="font-maglite">{{ proposal.mission }}</h3>
+                    <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
+                  </div>
+                  <span class="chip muted font-hermione">{{ proposal.status }}</span>
+                </div>
+              }
             }
           </div>
         </section>

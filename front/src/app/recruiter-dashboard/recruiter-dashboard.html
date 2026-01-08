@@ -62,14 +62,38 @@
               </div>
             </div>
             <div class="list">
-              @for (proposal of proposals; track proposal.id) {
-                <div class="list-item">
-                  <div>
-                    <h3 class="font-maglite">{{ proposal.mission }}</h3>
-                    <p class="meta font-hermione">{{ proposal.freelancer }} · {{ proposal.submitted }}</p>
-                  </div>
-                  <span class="chip muted font-hermione">{{ proposal.status }}</span>
+              @if ((allProposals | slice:0:3).length === 0) {
+                <div style="padding: 1rem; text-align: center; color: #999; font-size: 0.9rem;">
+                  <p>No proposals yet</p>
                 </div>
+              } @else {
+                @for (proposal of (allProposals | slice:0:3); track proposal.id) {
+                  <div class="list-item">
+                    <div>
+                      <h3 class="font-maglite">{{ proposal.mission }}</h3>
+                      <p class="meta font-hermione">{{ proposal.freelancer }} · {{ proposal.submitted }}</p>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                      <span class="chip muted font-hermione" [ngClass]="'status-' + proposal.status.toLowerCase()">{{ proposal.status }}</span>
+                      @if (proposal.status === 'PENDING') {
+                        <button 
+                          class="text-link" 
+                          style="font-size: 0.85rem; color: #4CAF50; padding: 0;"
+                          (click)="acceptProposal(proposal.id)"
+                          [disabled]="processingApplicationId === proposal.id">
+                          ✓
+                        </button>
+                        <button 
+                          class="text-link" 
+                          style="font-size: 0.85rem; color: #f44336; padding: 0;"
+                          (click)="rejectProposal(proposal.id)"
+                          [disabled]="processingApplicationId === proposal.id">
+                          ✗
+                        </button>
+                      }
+                    </div>
+                  </div>
+                }
               }
             </div>
           </div>
@@ -293,17 +317,44 @@
             </div>
           </div>
           <div class="list">
-            @for (proposal of proposals; track proposal.id) {
-              <div class="list-item">
-                <div>
-                  <h3 class="font-maglite">{{ proposal.mission }}</h3>
-                  <p class="meta font-hermione">{{ proposal.freelancer }} · {{ proposal.submitted }}</p>
-                </div>
-                <div class="proposal-actions">
-                  <span class="chip muted font-hermione">{{ proposal.status }}</span>
-                  <button class="text-link font-maglite" (click)="setTab('missions')">View mission</button>
-                </div>
+            @if (allProposals.length === 0) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>No proposals yet</p>
               </div>
+            } @else {
+              @for (proposal of allProposals; track proposal.id) {
+                <div class="list-item" [style.opacity]="processingApplicationId === proposal.id ? '0.6' : '1'">
+                  <div>
+                    <h3 class="font-maglite">{{ proposal.mission }}</h3>
+                    <p class="meta font-hermione">{{ proposal.freelancer }} · {{ proposal.submitted }}</p>
+                    <p class="meta font-hermione" style="font-size: 0.85rem; margin-top: 0.25rem;">Budget: {{ proposal.budget }} | Days: {{ proposal.estimatedDays || 'Not specified' }}</p>
+                  </div>
+                  <div class="proposal-actions">
+                    <span class="chip muted font-hermione" [ngClass]="'status-' + proposal.status.toLowerCase()">{{ proposal.status }}</span>
+                    
+                    @if (proposal.status === 'PENDING') {
+                      <button 
+                        class="btn-accept" 
+                        (click)="acceptProposal(proposal.id)"
+                        [disabled]="processingApplicationId === proposal.id"
+                        style="margin-left: 0.5rem; padding: 0.5rem 1rem; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
+                        {{ processingApplicationId === proposal.id ? 'Processing...' : 'Accept' }}
+                      </button>
+                      <button 
+                        class="btn-reject" 
+                        (click)="rejectProposal(proposal.id)"
+                        [disabled]="processingApplicationId === proposal.id"
+                        style="margin-left: 0.5rem; padding: 0.5rem 1rem; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
+                        {{ processingApplicationId === proposal.id ? 'Processing...' : 'Decline' }}
+                      </button>
+                    } @else if (proposal.status === 'ACCEPTED') {
+                      <span style="color: #4CAF50; font-weight: bold; margin-left: 0.5rem;">✓ Accepted</span>
+                    } @else if (proposal.status === 'REJECTED') {
+                      <span style="color: #f44336; font-weight: bold; margin-left: 0.5rem;">✗ Declined</span>
+                    }
+                  </div>
+                </div>
+              }
             }
           </div>
         </section>

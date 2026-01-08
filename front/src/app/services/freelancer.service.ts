@@ -119,11 +119,15 @@ export class FreelancerService {
   }
 
   getFreelancerRaw(id: string | number): Observable<BackendFreelancer> {
-    return this.http.get<BackendFreelancer>(`${this.apiUrl}/${id}`);
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.get<BackendFreelancer>(`${this.apiUrl}/${id}`, { headers });
   }
 
   getAllFreelancersRaw(): Observable<BackendFreelancer[]> {
-    return this.http.get<BackendFreelancer[]>(`${this.apiUrl}/freelancers`);
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.get<BackendFreelancer[]>(`${this.apiUrl}/freelancers`, { headers });
   }
 
   getFreelancerByEmail(email: string): Observable<BackendFreelancer | null> {
@@ -139,7 +143,37 @@ export class FreelancerService {
   updateFreelancer(id: string | number, payload: Partial<BackendFreelancer>): Observable<BackendFreelancer> {
     const token = localStorage.getItem('jwtToken');
     const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
-    return this.http.put<BackendFreelancer>(`${this.apiUrl}/${id}`, payload, { headers });
+    return this.http.post<BackendFreelancer>(`${this.apiUrl}/${id}`, payload, { headers });
+  }
+
+  getFreelancerApplications(freelancerId: string | number): Observable<any[]> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.get<any[]>(`http://localhost:8090/api/applications/freelancer/${freelancerId}`, { headers });
+  }
+
+  getFreelancerActiveMissions(freelancerId: string | number): Observable<any> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.get<any>(`http://localhost:8090/api/applications/freelancer/${freelancerId}/active-missions`, { headers });
+  }
+
+  getProposalsForMission(missionId: string | number): Observable<any> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.get<any>(`http://localhost:8090/api/applications/mission/${missionId}/proposals`, { headers });
+  }
+
+  acceptProposal(applicationId: string | number): Observable<any> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.put<any>(`http://localhost:8090/api/applications/${applicationId}/accept`, {}, { headers });
+  }
+
+  rejectProposal(applicationId: string | number): Observable<any> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.put<any>(`http://localhost:8090/api/applications/${applicationId}/reject`, {}, { headers });
   }
 
   private transformFreelancer(backend: BackendFreelancer): FreelancerDisplay {
