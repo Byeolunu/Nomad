@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth';
 import { FreelancerService, BackendFreelancer } from '../services/freelancer.service';
 
@@ -32,7 +33,7 @@ interface ConversationThread {
 })
 export class DashboardComponent implements OnInit {
   userEmail: string = '';
-  activeTab: 'overview' | 'missions' | 'proposals' | 'messages' | 'profile' = 'overview';
+  activeTab: 'overview' | 'missions' | 'proposals' | 'messages' | 'profile' | 'offers' = 'overview';
   userName: string = '';
   readonlyName: string = '';
   readonlyEmail: string = '';
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
   profileError: string | null = null;
   profileSaved = false;
   profileForm = {
+    name:'',
     phoneNumber: '',
     title: '',
     hourlyRate: 0,
@@ -61,6 +63,10 @@ export class DashboardComponent implements OnInit {
   proposals: any[] = [];
   proposalsLoading = false;
   proposalsError: string | null = null;
+
+  offers: any[] = [];
+  offersLoading = false;
+  offersError: string | null = null;
 
   messageThreads: ConversationThread[] = [
     {
@@ -111,7 +117,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private freelancerService: FreelancerService
+    private freelancerService: FreelancerService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -127,6 +134,7 @@ export class DashboardComponent implements OnInit {
     this.loadProfile();
     this.loadProposals();
     this.loadActiveMissions();
+    this.loadOffers();
   }
 
   getUserName(): string {
@@ -159,6 +167,7 @@ export class DashboardComponent implements OnInit {
         return;
       }
       this.freelancerRaw = freelancer;
+      this.profileForm.name= `${freelancer.firstName || ''} ${freelancer.lastName || ''}`.trim() || this.userName;
       this.profileForm.phoneNumber = freelancer.phoneNumber || '';
       this.profileForm.title = freelancer.title || '';
       this.profileForm.hourlyRate = freelancer.hourlyRate || 0;
@@ -198,6 +207,7 @@ export class DashboardComponent implements OnInit {
     this.profileLoading = true;
     this.profileSaved = false;
     const payload = {
+      name: this.profileForm.name,
       phoneNumber: this.profileForm.phoneNumber,
       title: this.profileForm.title,
       hourlyRate: Number(this.profileForm.hourlyRate) || 0,
@@ -302,6 +312,8 @@ export class DashboardComponent implements OnInit {
       this.loadProposals();
     } else if (tab === 'missions') {
       this.loadActiveMissions();
+    } else if (tab === 'offers') {
+      this.loadOffers();
     }
   }
 
@@ -340,10 +352,80 @@ export class DashboardComponent implements OnInit {
     };
 
     this.messageThreads = this.messageThreads.map(t =>
-      t.id === thread.id ? { ...t, messages: [...t.messages, updatedMessage], unread: false } : t
+      t.id === thread.id ? { ...t, messages: [...t.messages, updatedMessage] } : t
     );
-
     this.draftMessage = '';
+  }
+
+  loadOffers(): void {
+    const token = localStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    
+    this.offersLoading = true;
+    this.offersError = null;
+    
+    this.http.get<any[]>('http://localhost:8090/api/contracts/freelancer', { headers }).subscribe({
+      next: (contracts) => {
+        this.offers = contracts.map(contract => ({
+          id: contract.id,
+          title: contract.title,
+          description: contract.description,
+          budget: contract.budget,
+          status: contract.status,
+          recruiterName: `${contract.recruiter?.firstName || ''} ${contract.recruiter?.lastName || ''}`.trim(),
+          recruiterCompany: contract.recruiter?.companyName || 'Company',
+          createdAt: contract.createdAt || new Date().toISOString()
+        }));
+        this.offersLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading offers:', err);
+        this.offersError = 'Failed to load offers';
+        this.offersLoading = false;
+      }
+    });
+  }
+
+  acceptOffer(offerId: number): void {
+    const token = localStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    
+    this.http.put<any>(
+      `http://localhost:8090/api/contracts/${offerId}/status`,
+      { status: 'ACCEPTED' },
+      { headers }
+    ).subscribe({
+      next: () => {
+        alert('Offer accepted successfully!');
+        this.offers = this.offers.filter(o => o.id !== offerId);
+        this.loadOffers();
+      },
+      error: (err) => {
+        console.error('Error accepting offer:', err);
+        alert('Failed to accept offer');
+      }
+    });
+  }
+
+  rejectOffer(offerId: number): void {
+    const token = localStorage.getItem('jwtToken');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    
+    this.http.put<any>(
+      `http://localhost:8090/api/contracts/${offerId}/status`,
+      { status: 'REJECTED' },
+      { headers }
+    ).subscribe({
+      next: () => {
+        alert('Offer rejected');
+        this.offers = this.offers.filter(o => o.id !== offerId);
+        this.loadOffers();
+      },
+      error: (err) => {
+        console.error('Error rejecting offer:', err);
+        alert('Failed to reject offer');
+      }
+    });
   }
 
   loadProposals(): void {
@@ -362,7 +444,6 @@ export class DashboardComponent implements OnInit {
     this.freelancerService.getFreelancerApplications(userId).subscribe({
       next: (applications: any[]) => {
         console.log('Received applications:', applications);
-        // Transform applications to proposal format
         this.proposals = applications.map(app => ({
           id: app.id,
           mission: app.mission?.title || 'Unknown Mission',

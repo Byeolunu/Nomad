@@ -89,9 +89,11 @@ export class MissionDetailComponent implements OnInit {
 
   navigateToCompanyProfile() {
     if (this.mission?.recruiter?.id) {
-      this.router.navigate(['/recruiter-profile', this.mission.recruiter.id]);
+      console.log('Navigating to company profile for recruiter:', this.mission.recruiter.id);
+      this.router.navigate(['/company', this.mission.recruiter.id]);
     } else {
-      this.router.navigate(['/recruiter-profile', '1']);
+      console.log('No recruiter ID found');
+      alert('Company profile not available');
     }
   }
 }

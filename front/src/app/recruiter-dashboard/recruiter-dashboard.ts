@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth';
@@ -131,6 +131,7 @@ export class RecruiterDashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private http: HttpClient
   ) {}
 
@@ -139,6 +140,14 @@ export class RecruiterDashboardComponent implements OnInit {
       this.router.navigate(['/home']);
       return;
     }
+    
+    // Check if coming from mission details with tab parameter
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'company') {
+        this.activeTab = 'company';
+      }
+    });
+    
     this.userEmail = this.authService.getUserEmail() || 'Recruiter';
     this.recruiterReadonly = {
       name: this.getUserName(),

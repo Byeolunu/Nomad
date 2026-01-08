@@ -11,6 +11,7 @@ import { RecruiterDashboardComponent } from './recruiter-dashboard/recruiter-das
 import { PostMissionComponent } from './post-mission/post-mission';
 import { ApplyMissionComponent } from './apply-mission/apply-mission';
 import { HireFreelancerComponent } from './hire-freelancer/hire-freelancer';
+import { CompanyProfileComponent } from './company-profile/company-profile';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'missions/:id', component: MissionDetailComponent },
   { path: 'freelancers', component: FreelancersComponent },
   { path: 'freelancers/:id', component: FreelancerProfileComponent },
+  { path: 'company/:id', component: CompanyProfileComponent },
   { path: 'hire/:id', component: HireFreelancerComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'recruiter-dashboard', component: RecruiterDashboardComponent },

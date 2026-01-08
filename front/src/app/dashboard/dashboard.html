@@ -23,6 +23,9 @@
         <button class="nav-item" [class.active]="activeTab === 'proposals'" (click)="setTab('proposals')">
           <span>My Proposals</span>
         </button>
+        <button class="nav-item" [class.active]="activeTab === 'offers'" (click)="setTab('offers')">
+          <span>Offers</span>
+        </button>
         <button class="nav-item" [class.active]="activeTab === 'messages'" (click)="setTab('messages')">
           <span>Messages</span>
         </button>
@@ -164,7 +167,7 @@
               <div class="form-row two">
                 <label class="form-field">
                   <span class="label font-hermione">Name</span>
-                  <input type="text" [value]="readonlyName" readonly>
+                  <input type="text" [(ngModel)]="profileForm.name" name="name" placeholder="Your name">
                 </label>
                 <label class="form-field">
                   <span class="label font-hermione">Email</span>
@@ -272,6 +275,58 @@
                     <p class="meta font-hermione">Submitted {{ proposal.submitted }}</p>
                   </div>
                   <span class="chip muted font-hermione">{{ proposal.status }}</span>
+                </div>
+              }
+            }
+          </div>
+        </section>
+      }
+
+      @if (activeTab === 'offers') {
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow font-hermione">Offers</p>
+              <h2 class="font-maglite">Hiring offers</h2>
+            </div>
+          </div>
+          <div class="offers-list">
+            @if (offersLoading) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>Loading offers...</p>
+              </div>
+            } @else if (offersError) {
+              <div style="padding: 1rem; text-align: center; color: #d32f2f;">
+                <p>{{ offersError }}</p>
+              </div>
+            } @else if (offers.length === 0) {
+              <div style="padding: 1rem; text-align: center; color: #999;">
+                <p>No offers yet. Recruiters can send you offers when they discover your profile.</p>
+              </div>
+            } @else {
+              @for (offer of offers; track offer.id) {
+                <div class="offer-card">
+                  <div class="offer-header">
+                    <div>
+                      <h3 class="font-maglite">{{ offer.title }}</h3>
+                      <p class="recruiter-name font-hermione">{{ offer.recruiterName }} @ {{ offer.recruiterCompany }}</p>
+                    </div>
+                    <span class="status-badge font-hermione">{{ offer.status }}</span>
+                  </div>
+                  <p class="offer-description font-hermione">{{ offer.description }}</p>
+                  <div class="offer-footer">
+                    <span class="offer-budget font-maglite">{{ offer.budget }} MAD</span>
+                    @if (offer.status === 'IN_PROGRESS') {
+                      <div class="offer-actions">
+                        <button class="btn-accept font-maglite" (click)="acceptOffer(offer.id)">Accept</button>
+                        <button class="btn-reject font-maglite" (click)="rejectOffer(offer.id)">Decline</button>
+                      </div>
+                    } @else {
+                      <div class="offer-status-message font-hermione">
+                        Status: <strong>{{ offer.status }}</strong>
+                      </div>
+                    }
+                  </div>
                 </div>
               }
             }

@@ -35,11 +35,20 @@ public class UserController {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not found"));
             
-            // Check if it's a Freelancer
             if (user instanceof Freelancer) {
                 Freelancer freelancer = (Freelancer) user;
                 
-                // Update fields if provided
+                if (updates.containsKey("name")) {
+                    String fullName = (String) updates.get("name");
+                    String[] nameParts = fullName.trim().split("\\s+", 2);
+                    freelancer.setFirstName(nameParts[0]);
+                    if (nameParts.length > 1) {
+                        freelancer.setLastName(nameParts[1]);
+                    } else {
+                        freelancer.setLastName("");
+                    }
+                }
+                
                 if (updates.containsKey("phoneNumber")) {
                     freelancer.setPhoneNumber((String) updates.get("phoneNumber"));
                 }
