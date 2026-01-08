@@ -20,7 +20,6 @@ export class FreelancerProfileComponent implements OnInit {
   isLoggedIn = false;
   isRecruiter = false;
 
-  // Review form state
   canReview = false;
   hasReviewed = false;
   hasWorkedTogether = false;

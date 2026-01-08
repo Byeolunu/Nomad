@@ -14,16 +14,21 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Freelancer extends User {
     private String title;
+
     @Column(length = 1000)
     private String summary;
+
     private Double hourlyRate;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     @JsonIgnoreProperties({"freelancer", "hibernateLazyInitializer", "handler"})
     private Profile profile;
+
     @OneToMany(mappedBy = "freelancer")
     @JsonIgnoreProperties({"freelancer", "mission"})
     private List<Application> applications = new ArrayList<>();
+    
     @ManyToMany
     @JsonIgnoreProperties({"missions", "hibernateLazyInitializer", "handler"})
     private List<Skill> skills;
