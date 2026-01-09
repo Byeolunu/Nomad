@@ -1,17 +1,22 @@
 package nutar.back.web;
 import nutar.back.dao.entites.User;
 import nutar.back.dao.entites.Freelancer;
-import nutar.back.dao.entites.Recruiter;
 import nutar.back.dao.entites.Profile;
+import nutar.back.dao.entites.Recruiter;
+import nutar.back.dao.entites.Skill;
 import nutar.back.dao.repositories.UserRepository;
 import nutar.back.dao.repositories.FreelancerRepository;
+import nutar.back.dao.repositories.SkillRepository;
 import nutar.back.service.UserService;
 import nutar.back.service.FreelancerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -24,6 +29,8 @@ public class UserController {
     private FreelancerRepository freelancerRepository;
     @Autowired
     private FreelancerService freelancerService;
+    @Autowired
+    private SkillRepository skillRepository;
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -61,6 +68,32 @@ public class UserController {
                 }
                 if (updates.containsKey("summary")) {
                     freelancer.setSummary((String) updates.get("summary"));
+                }
+
+                if (updates.containsKey("skillIds")) {
+                    Object rawSkillIds = updates.get("skillIds");
+                    if (rawSkillIds instanceof List<?>) {
+                        List<Long> skillIds = ((List<?>) rawSkillIds).stream()
+                                .map(val -> {
+                                    if (val instanceof Number) {
+                                        return ((Number) val).longValue();
+                                    }
+                                    try {
+                                        return Long.valueOf(val.toString());
+                                    } catch (NumberFormatException ex) {
+                                        return null;
+                                    }
+                                })
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList());
+
+                        if (!skillIds.isEmpty()) {
+                            List<Skill> skills = skillRepository.findAllById(skillIds);
+                            freelancer.setSkills(skills);
+                        } else {
+                            freelancer.setSkills(new ArrayList<>());
+                        }
+                    }
                 }
                 
                 // Handle profile updates

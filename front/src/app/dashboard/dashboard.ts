@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth';
-import { FreelancerService, BackendFreelancer, BackendPortfolio } from '../services/freelancer.service';
+import { FreelancerService, BackendFreelancer, BackendPortfolio, BackendSkill } from '../services/freelancer.service';
 
 type ConversationRole = 'recruiter' | 'pm' | 'freelancer';
 
@@ -49,8 +49,12 @@ export class DashboardComponent implements OnInit {
     bio: '',
     location: '',
     profilePicture: '',
-    experienceLevel: ''
+    experienceLevel: '',
+    skillIds: [] as number[]
   };
+  availableSkills: BackendSkill[] = [];
+  skillsLoading = false;
+  skillsError: string | null = null;
   experienceLevels = ['JUNIOR', 'MID', 'SENIOR'];
   portfolios: BackendPortfolio[] = [];
   newPortfolio: Partial<BackendPortfolio> = {
@@ -145,6 +149,7 @@ export class DashboardComponent implements OnInit {
     this.readonlyEmail = this.userEmail;
     this.readonlyName = this.userName;
     this.selectedThreadId = this.messageThreads[0]?.id ?? null;
+    this.loadSkills();
     this.loadProfile();
     this.loadPortfolios();
     this.loadProposals();
@@ -191,6 +196,10 @@ export class DashboardComponent implements OnInit {
       this.profileForm.location = freelancer.profile?.location || '';
       this.profileForm.profilePicture = freelancer.profile?.profilePicture || '';
       this.profileForm.experienceLevel = freelancer.profile?.experienceLevel || '';
+      const skillSource = (freelancer.skills && freelancer.skills.length > 0)
+        ? freelancer.skills
+        : (freelancer.profile?.skills || []);
+      this.profileForm.skillIds = skillSource.map(s => s.id);
       this.readonlyName = `${freelancer.firstName || ''} ${freelancer.lastName || ''}`.trim() || this.userName;
       this.readonlyEmail = freelancer.email || this.userEmail;
       // Don't overwrite portfolios here - let loadPortfolios handle it
@@ -220,6 +229,22 @@ export class DashboardComponent implements OnInit {
       this.profileError = 'No user id found';
       this.profileLoading = false;
     }
+  }
+
+  loadSkills(): void {
+    this.skillsLoading = true;
+    this.skillsError = null;
+    this.freelancerService.getAllSkills().subscribe({
+      next: (skills) => {
+        this.availableSkills = skills || [];
+        this.skillsLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading skills', err);
+        this.skillsError = 'Failed to load skills';
+        this.skillsLoading = false;
+      }
+    });
   }
 
   loadPortfolios(): void {
@@ -305,6 +330,34 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  isSkillSelected(id: number): boolean {
+    return this.profileForm.skillIds.includes(id);
+  }
+
+  toggleSkill(id: number): void {
+    if (this.isSkillSelected(id)) {
+      this.profileForm.skillIds = this.profileForm.skillIds.filter(s => s !== id);
+    } else {
+      this.profileForm.skillIds = [...this.profileForm.skillIds, id];
+    }
+  }
+
+  getSkillGroups(): { category: string; skills: BackendSkill[] }[] {
+    const grouped = new Map<string, BackendSkill[]>();
+    this.availableSkills.forEach((skill) => {
+      const cat = skill.category || 'Other';
+      if (!grouped.has(cat)) grouped.set(cat, []);
+      grouped.get(cat)!.push(skill);
+    });
+
+    const groups = Array.from(grouped.entries()).map(([category, skills]) => ({
+      category,
+      skills: [...skills].sort((a, b) => a.name.localeCompare(b.name))
+    }));
+
+    return groups.sort((a, b) => a.category.localeCompare(b.category));
+  }
+
   saveProfile(): void {
     if (!this.freelancerRaw) return;
     this.profileLoading = true;
@@ -318,7 +371,8 @@ export class DashboardComponent implements OnInit {
       bio: this.profileForm.bio,
       location: this.profileForm.location,
       profilePicture: this.profileForm.profilePicture,
-      experienceLevel: this.profileForm.experienceLevel
+      experienceLevel: this.profileForm.experienceLevel,
+      skillIds: this.profileForm.skillIds
     } as Partial<BackendFreelancer>;
 
     console.log('Saving profile with payload:', payload);
@@ -327,6 +381,10 @@ export class DashboardComponent implements OnInit {
       next: (updated) => {
         console.log('Profile saved successfully:', updated);
         this.freelancerRaw = updated;
+        const updatedSkills = (updated.skills && updated.skills.length > 0)
+          ? updated.skills
+          : (updated.profile?.skills || []);
+        this.profileForm.skillIds = updatedSkills.map(s => s.id);
         this.profileSaved = true;
         this.profileError = null;
         this.profileLoading = false;
