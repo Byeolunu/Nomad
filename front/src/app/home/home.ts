@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ZellijPatternComponent } from '../components/zellij-pattern/zellij-pattern';
 import { categories, testimonials } from '../lib/mockData';
 import { AuthService } from '../auth/auth';
 import { Subscription } from 'rxjs';
@@ -15,7 +14,6 @@ import { ButtonComponent } from '../components/ui/button/button';
   imports: [
     CommonModule,
     FormsModule,
-    ZellijPatternComponent,
     CardComponent,
     ButtonComponent
   ],
