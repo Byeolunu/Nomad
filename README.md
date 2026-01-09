@@ -1,4 +1,15 @@
-# Nomad - Freelance Platform in Morocco 🇲🇦
+# 🚀 NOMAD - Freelancing Plateform
+
+![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-green?style=flat-square&logo=spring)
+![Angular](https://img.shields.io/badge/Angular-17-red?style=flat-square&logo=angular)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=flat-square&logo=tailwindcss)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=flat-square&logo=mysql)
+![JWT](https://img.shields.io/badge/JWT-Auth-black?style=flat-square&logo=json-web-tokens)
+![Maven](https://img.shields.io/badge/Maven-3.x-C71A36?style=flat-square&logo=apache-maven)
+
+## Nomad - Freelance Platform in Morocco 🇲🇦
 
 Nomad is a modern web platform designed to connect Moroccan freelance talents with recruiters seeking expertise. The project follows a decoupled architecture with a robust Spring Boot back-end and a responsive Angular front-end.
 
@@ -84,7 +95,7 @@ Nomad/
 
 3. Start the development server:
    ```bash
-   npm start
+   ng serve
    ```
    The application will be accessible at: **`http://localhost:4200`**
 
