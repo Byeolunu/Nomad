@@ -44,11 +44,11 @@ Cliquez `OK` pour vous connecter.
 Server → Data Import -> Import from self-contained file
 ```
 
-✅ **C'EST BON ! La base est importée !**
+ **C'EST BON ! La base est importée !**
 
 ---
 
-## ✔️ Vérifier que tout fonctionne
+## Vérifier que tout fonctionne
 
 ### Dans SQL Workbench:
 
