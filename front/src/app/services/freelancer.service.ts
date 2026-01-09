@@ -95,6 +95,7 @@ export interface Review {
 })
 export class FreelancerService {
   private apiUrl = 'http://localhost:8090/api/users';
+  private portfolioUrl = 'http://localhost:8090/api/portfolios';
 
   constructor(private http: HttpClient) {}
 
@@ -144,6 +145,34 @@ export class FreelancerService {
     const token = localStorage.getItem('jwtToken');
     const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
     return this.http.post<BackendFreelancer>(`${this.apiUrl}/${id}`, payload, { headers });
+  }
+
+  getPortfolios(freelancerId: string | number): Observable<BackendPortfolio[]> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    const url = `${this.portfolioUrl}/freelancer/${freelancerId}`;
+    console.log('GET portfolios from:', url);
+    return this.http.get<BackendPortfolio[]>(url, { headers });
+  }
+
+  addPortfolio(freelancerId: string | number, payload: Partial<BackendPortfolio>): Observable<BackendPortfolio> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    const url = `${this.portfolioUrl}/freelancer/${freelancerId}`;
+    console.log('POST portfolio to:', url, payload);
+    return this.http.post<BackendPortfolio>(url, payload, { headers });
+  }
+
+  updatePortfolio(id: string | number, payload: Partial<BackendPortfolio>): Observable<BackendPortfolio> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.put<BackendPortfolio>(`${this.portfolioUrl}/${id}`, payload, { headers });
+  }
+
+  deletePortfolio(id: string | number): Observable<any> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.delete(`${this.portfolioUrl}/${id}`, { headers });
   }
 
   getFreelancerApplications(freelancerId: string | number): Observable<any[]> {

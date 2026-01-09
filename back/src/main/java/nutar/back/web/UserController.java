@@ -2,6 +2,7 @@ package nutar.back.web;
 import nutar.back.dao.entites.User;
 import nutar.back.dao.entites.Freelancer;
 import nutar.back.dao.entites.Recruiter;
+import nutar.back.dao.entites.Profile;
 import nutar.back.dao.repositories.UserRepository;
 import nutar.back.dao.repositories.FreelancerRepository;
 import nutar.back.service.UserService;
@@ -62,8 +63,43 @@ public class UserController {
                     freelancer.setSummary((String) updates.get("summary"));
                 }
                 
+                // Handle profile updates
+                if (updates.containsKey("bio") || updates.containsKey("location") || 
+                    updates.containsKey("profilePicture") || updates.containsKey("experienceLevel")) {
+                    Profile profile = freelancer.getProfile();
+                    if (profile == null) {
+                        profile = new Profile();
+                        profile.setFreelancer(freelancer);
+                        profile.setBio("");
+                        freelancer.setProfile(profile);
+                    }
+                    if (updates.containsKey("bio")) {
+                        String bio = (String) updates.get("bio");
+                        profile.setBio(bio != null ? bio : "");
+                    }
+                    if (updates.containsKey("location")) {
+                        String location = (String) updates.get("location");
+                        profile.setLocation(location != null ? location : "");
+                    }
+                    if (updates.containsKey("profilePicture")) {
+                        String profilePic = (String) updates.get("profilePicture");
+                        profile.setProfilePicture(profilePic != null ? profilePic : "");
+                    }
+                    if (updates.containsKey("experienceLevel")) {
+                        String expLevel = (String) updates.get("experienceLevel");
+                        if (expLevel != null && !expLevel.trim().isEmpty()) {
+                            try {
+                                profile.setExperienceLevel(nutar.back.dao.enums.ExperienceLevel.valueOf(expLevel));
+                            } catch (IllegalArgumentException e) {
+                                System.err.println("Invalid experience level: " + expLevel);
+                            }
+                        }
+                    }
+                }
+                
                 Freelancer updated = freelancerService.updateFreelancer(freelancer);
                 System.out.println("DEBUG: Freelancer updated: " + updated.getId());
+                System.out.println("DEBUG: Profile: " + (updated.getProfile() != null ? updated.getProfile().getId() : "null"));
                 return ResponseEntity.ok(updated);
             }
             

@@ -16,10 +16,21 @@ public class ProfileManager implements ProfileService {
     public Profile updateProfile(Long profileId, Profile profile) {
         Profile existingProfile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
-        existingProfile.setSkills(profile.getSkills());
-        existingProfile.setExperienceLevel(profile.getExperienceLevel());
-        existingProfile.setBio(profile.getBio());
-        existingProfile.setLocation(profile.getLocation());
+        if (profile.getSkills() != null) {
+            existingProfile.setSkills(profile.getSkills());
+        }
+        if (profile.getExperienceLevel() != null) {
+            existingProfile.setExperienceLevel(profile.getExperienceLevel());
+        }
+        if (profile.getBio() != null) {
+            existingProfile.setBio(profile.getBio());
+        }
+        if (profile.getLocation() != null) {
+            existingProfile.setLocation(profile.getLocation());
+        }
+        if (profile.getProfilePicture() != null) {
+            existingProfile.setProfilePicture(profile.getProfilePicture());
+        }
         return profileRepository.save(existingProfile);
     }
 }

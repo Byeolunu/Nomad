@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth';
-import { FreelancerService, BackendFreelancer } from '../services/freelancer.service';
+import { FreelancerService, BackendFreelancer, BackendPortfolio } from '../services/freelancer.service';
 
 type ConversationRole = 'recruiter' | 'pm' | 'freelancer';
 
@@ -45,8 +45,22 @@ export class DashboardComponent implements OnInit {
     phoneNumber: '',
     title: '',
     hourlyRate: 0,
-    summary: ''
+    summary: '',
+    bio: '',
+    location: '',
+    profilePicture: '',
+    experienceLevel: ''
   };
+  experienceLevels = ['JUNIOR', 'MID', 'SENIOR'];
+  portfolios: BackendPortfolio[] = [];
+  newPortfolio: Partial<BackendPortfolio> = {
+    title: '',
+    description: '',
+    imageUrl: '',
+    projectUrl: ''
+  };
+  portfolioLoading = false;
+  portfolioError: string | null = null;
   freelancerRaw: BackendFreelancer | null = null;
 
   stats = [
@@ -132,6 +146,7 @@ export class DashboardComponent implements OnInit {
     this.readonlyName = this.userName;
     this.selectedThreadId = this.messageThreads[0]?.id ?? null;
     this.loadProfile();
+    this.loadPortfolios();
     this.loadProposals();
     this.loadActiveMissions();
     this.loadOffers();
@@ -171,9 +186,14 @@ export class DashboardComponent implements OnInit {
       this.profileForm.phoneNumber = freelancer.phoneNumber || '';
       this.profileForm.title = freelancer.title || '';
       this.profileForm.hourlyRate = freelancer.hourlyRate || 0;
-      this.profileForm.summary = freelancer.summary || freelancer.profile?.bio || '';
+      this.profileForm.summary = freelancer.summary || '';
+      this.profileForm.bio = freelancer.profile?.bio || '';
+      this.profileForm.location = freelancer.profile?.location || '';
+      this.profileForm.profilePicture = freelancer.profile?.profilePicture || '';
+      this.profileForm.experienceLevel = freelancer.profile?.experienceLevel || '';
       this.readonlyName = `${freelancer.firstName || ''} ${freelancer.lastName || ''}`.trim() || this.userName;
       this.readonlyEmail = freelancer.email || this.userEmail;
+      // Don't overwrite portfolios here - let loadPortfolios handle it
       this.profileError = null;
       this.profileLoading = false;
     };
@@ -202,6 +222,89 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  loadPortfolios(): void {
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      console.warn('No user ID found for loading portfolios');
+      this.portfolios = [];
+      return;
+    }
+
+    console.log('Loading portfolios for user:', userId);
+    this.portfolioLoading = true;
+    this.portfolioError = null;
+    this.freelancerService.getPortfolios(userId).subscribe({
+      next: (items) => {
+        console.log('Portfolios loaded successfully:', items);
+        this.portfolios = items || [];
+        this.portfolioLoading = false;
+        this.portfolioError = null;
+      },
+      error: (err) => {
+        console.error('Error loading portfolios:', err);
+        console.error('Error status:', err.status);
+        console.error('Error details:', err.error);
+        // Empty portfolio is valid - only show error for actual server failures
+        this.portfolios = [];
+        this.portfolioLoading = false;
+        // Only show error if it's a server error (not 404)
+        if (err.status && err.status !== 404) {
+          this.portfolioError = 'Failed to load portfolio: ' + (err.error?.error || err.message);
+        }
+      }
+    });
+  }
+
+  addPortfolio(): void {
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      this.portfolioError = 'Please log in to add projects';
+      return;
+    }
+    if (!this.newPortfolio.title?.trim()) {
+      this.portfolioError = 'Title is required to add a project';
+      setTimeout(() => this.portfolioError = null, 3000);
+      return;
+    }
+    console.log('Adding portfolio for user:', userId, this.newPortfolio);
+    this.portfolioLoading = true;
+    this.portfolioError = null;
+    this.freelancerService.addPortfolio(userId, this.newPortfolio).subscribe({
+      next: (created) => {
+        console.log('Portfolio created successfully:', created);
+        this.portfolios = [created, ...this.portfolios];
+        this.newPortfolio = { title: '', description: '', imageUrl: '', projectUrl: '' };
+        this.portfolioLoading = false;
+        this.portfolioError = null;
+      },
+      error: (err) => {
+        console.error('Error adding portfolio:', err);
+        console.error('Error status:', err.status);
+        console.error('Error details:', err.error);
+        this.portfolioError = 'Failed to add project: ' + (err.error?.error || err.message);
+        this.portfolioLoading = false;
+      }
+    });
+  }
+
+  deletePortfolio(id: number | undefined): void {
+    if (!id) return;
+    if (!confirm('Are you sure you want to delete this project?')) return;
+    this.portfolioLoading = true;
+    this.portfolioError = null;
+    this.freelancerService.deletePortfolio(id).subscribe({
+      next: () => {
+        this.portfolios = this.portfolios.filter(p => p.id !== id);
+        this.portfolioLoading = false;
+      },
+      error: (err) => {
+        console.error('Error deleting portfolio', err);
+        this.portfolioError = 'Failed to delete project';
+        this.portfolioLoading = false;
+      }
+    });
+  }
+
   saveProfile(): void {
     if (!this.freelancerRaw) return;
     this.profileLoading = true;
@@ -211,19 +314,32 @@ export class DashboardComponent implements OnInit {
       phoneNumber: this.profileForm.phoneNumber,
       title: this.profileForm.title,
       hourlyRate: Number(this.profileForm.hourlyRate) || 0,
-      summary: this.profileForm.summary
+      summary: this.profileForm.summary,
+      bio: this.profileForm.bio,
+      location: this.profileForm.location,
+      profilePicture: this.profileForm.profilePicture,
+      experienceLevel: this.profileForm.experienceLevel
     } as Partial<BackendFreelancer>;
+
+    console.log('Saving profile with payload:', payload);
 
     this.freelancerService.updateFreelancer(this.freelancerRaw.id, payload).subscribe({
       next: (updated) => {
+        console.log('Profile saved successfully:', updated);
         this.freelancerRaw = updated;
         this.profileSaved = true;
         this.profileError = null;
         this.profileLoading = false;
+        // Reload profile to get fresh data
+        setTimeout(() => {
+          this.profileSaved = false;
+        }, 3000);
       },
       error: (err) => {
-        console.error('Error saving profile', err);
-        this.profileError = 'Could not save changes';
+        console.error('Error saving profile:', err);
+        console.error('Error status:', err.status);
+        console.error('Error details:', err.error);
+        this.profileError = 'Could not save changes: ' + (err.error?.error || err.message);
         this.profileLoading = false;
       }
     });
@@ -314,6 +430,8 @@ export class DashboardComponent implements OnInit {
       this.loadActiveMissions();
     } else if (tab === 'offers') {
       this.loadOffers();
+    } else if (tab === 'profile') {
+      this.loadPortfolios();
     }
   }
 

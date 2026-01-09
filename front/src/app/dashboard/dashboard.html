@@ -197,11 +197,95 @@
                 </label>
               </div>
 
+              <div class="form-row three">
+                <label class="form-field">
+                  <span class="label font-hermione">Experience Level</span>
+                  <select [(ngModel)]="profileForm.experienceLevel" name="experienceLevel" class="select-input">
+                    <option value="">Select level</option>
+                    @for (level of experienceLevels; track level) {
+                      <option [value]="level">{{ level }}</option>
+                    }
+                  </select>
+                </label>
+                <label class="form-field">
+                  <span class="label font-hermione">Location</span>
+                  <input type="text" [(ngModel)]="profileForm.location" name="location" placeholder="City, Country">
+                </label>
+                <label class="form-field">
+                  <span class="label font-hermione">Profile Picture URL</span>
+                  <input type="text" [(ngModel)]="profileForm.profilePicture" name="profilePicture" placeholder="https://...">
+                </label>
+              </div>
+
+              <div class="form-row">
+                <label class="form-field">
+                  <span class="label font-hermione">Bio</span>
+                  <textarea rows="5" [(ngModel)]="profileForm.bio" name="bio" placeholder="Tell your story, highlight your expertise, and what makes you unique as a freelancer"></textarea>
+                </label>
+              </div>
+
               <div class="profile-actions">
                 <button class="primary-btn font-maglite" [disabled]="profileLoading" (click)="saveProfile()">
                   @if (profileLoading) { Saving... } @else { Save changes }
                 </button>
                 <button class="ghost-btn font-maglite" type="button" (click)="loadProfile()">Reset</button>
+              </div>
+
+              <div class="form-block" style="margin-top:1.5rem;">
+                <p class="eyebrow font-hermione">Portfolio</p>
+                <h3 class="font-maglite">Showcase your work</h3>
+
+                @if (portfolioError) {
+                  <div class="state-block error" style="margin-bottom:1rem;">
+                    <p class="font-hermione">{{ portfolioError }}</p>
+                  </div>
+                }
+
+                <div class="form-row two">
+                  <label class="form-field">
+                    <span class="label font-hermione">Title</span>
+                    <input type="text" [(ngModel)]="newPortfolio.title" name="portfolioTitle" placeholder="Project title">
+                  </label>
+                  <label class="form-field">
+                    <span class="label font-hermione">Image URL</span>
+                    <input type="text" [(ngModel)]="newPortfolio.imageUrl" name="portfolioImage" placeholder="https://...">
+                  </label>
+                </div>
+                <div class="form-row two">
+                  <label class="form-field">
+                    <span class="label font-hermione">Project URL</span>
+                    <input type="text" [(ngModel)]="newPortfolio.projectUrl" name="portfolioLink" placeholder="https://github.com/...">
+                  </label>
+                  <label class="form-field">
+                    <span class="label font-hermione">Short description</span>
+                    <input type="text" [(ngModel)]="newPortfolio.description" name="portfolioDesc" placeholder="What you built and impact">
+                  </label>
+                </div>
+                <div class="profile-actions" style="padding-top:0;">
+                  <button class="primary-btn font-maglite" type="button" (click)="addPortfolio()" [disabled]="portfolioLoading">Add project</button>
+                </div>
+
+                <div class="portfolio-grid">
+                  @if (portfolioLoading) {
+                    <p class="meta font-hermione" style="padding:0.5rem 0;">Loading portfolio...</p>
+                  } @else if (!portfolios || portfolios.length === 0) {
+                    <p class="meta font-hermione" style="padding:0.5rem 0;">No portfolio items yet.</p>
+                  } @else {
+                    @for (p of portfolios; track p.id) {
+                      <article class="portfolio-card">
+                        <div class="portfolio-thumb" [style.backgroundImage]="p.imageUrl ? 'url(' + p.imageUrl + ')' : 'none'"></div>
+                        <div class="portfolio-body">
+                          <h4 class="font-maglite">{{ p.title }}</h4>
+                          <p class="meta font-hermione">{{ p.description }}</p>
+                          @if (p.projectUrl) {
+                            <a [href]="p.projectUrl" target="_blank" rel="noopener" class="text-link">View project</a>
+                          }
+                        </div>
+                        <button class="ghost-btn font-hermione" type="button" (click)="deletePortfolio(p.id)">Delete</button>
+                      </article>
+                    }
+                  }
+                </div>
               </div>
             </div>
           }

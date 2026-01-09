@@ -32,7 +32,8 @@ public class Freelancer extends User {
     @ManyToMany
     @JsonIgnoreProperties({"missions", "hibernateLazyInitializer", "handler"})
     private List<Skill> skills;
-    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"freelancer"})
     private List<Portfolio> portfolios = new ArrayList<>();
     @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"freelancer"})
