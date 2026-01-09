@@ -163,7 +163,7 @@ This project is licensed under the **MIT License** – feel free to use it for y
 
 ## Authors & Contributors
 
-**Nomad** was created by @byeolunu[(https://github.com/byeolunu] and @iKawtar(https://github.com/iKawtar) . We appreciate all contributions and feedback from the community!
+**Nomad** was created by [@byeolunu](https://github.com/byeolunu) and [@iKawtar](https://github.com/iKawtar) . We appreciate all contributions and feedback from the community!
 
 Have questions? Feel free to open an **Issue** or reach out to the team.
 
