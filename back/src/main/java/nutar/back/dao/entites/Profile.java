@@ -32,10 +32,4 @@ public class Profile {
     private ExperienceLevel experienceLevel;
     private String location;
     private String profilePicture;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "profile_id")
-    private List<WorkExperience> workExperiences = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "profile_id")
-    private List<Education> educations = new ArrayList<>();
 }

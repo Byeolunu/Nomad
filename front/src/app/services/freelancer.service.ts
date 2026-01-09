@@ -22,13 +22,19 @@ export interface BackendFreelancer {
     experienceLevel: string;
     location: string;
     profilePicture: string;
-    workExperiences: any[];
-    educations: any[];
   };
   skills: { id: number; name: string; category: string }[];
+  skillIds?: number[];
   applications: any[];
   portfolios?: BackendPortfolio[];
   reviews?: BackendReview[];
+}
+
+export interface BackendSkill {
+  id: number;
+  name: string;
+  description?: string;
+  category: string;
 }
 
 export interface BackendPortfolio {
@@ -96,6 +102,7 @@ export interface Review {
 export class FreelancerService {
   private apiUrl = 'http://localhost:8090/api/users';
   private portfolioUrl = 'http://localhost:8090/api/portfolios';
+  private skillsUrl = 'http://localhost:8090/api/skills';
 
   constructor(private http: HttpClient) {}
 
@@ -145,6 +152,12 @@ export class FreelancerService {
     const token = localStorage.getItem('jwtToken');
     const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
     return this.http.post<BackendFreelancer>(`${this.apiUrl}/${id}`, payload, { headers });
+  }
+
+  getAllSkills(): Observable<BackendSkill[]> {
+    const token = localStorage.getItem('jwtToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
+    return this.http.get<BackendSkill[]>(this.skillsUrl, { headers });
   }
 
   getPortfolios(freelancerId: string | number): Observable<BackendPortfolio[]> {

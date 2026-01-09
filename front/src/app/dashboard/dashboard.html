@@ -217,6 +217,40 @@
                 </label>
               </div>
 
+              <div class="form-block">
+                <p class="eyebrow font-hermione">Skills</p>
+                <h3 class="font-maglite">Show what you can do</h3>
+                @if (skillsLoading) {
+                  <p class="meta font-hermione" style="padding:0.25rem 0;">Loading skills...</p>
+                } @else if (skillsError) {
+                  <div class="state-block error" style="margin:0.5rem 0;">
+                    <p class="font-hermione">{{ skillsError }}</p>
+                    <button class="primary-btn font-maglite" type="button" (click)="loadSkills()">Retry</button>
+                  </div>
+                } @else {
+                  <div class="skills-section">
+                    @for (group of getSkillGroups(); track group.category) {
+                      <div class="skill-group">
+                        <div class="skill-group-header">
+                          <span class="skill-group-name font-maglite">{{ group.category }}</span>
+                          <span class="skill-count font-hermione">{{ group.skills.length }} skills</span>
+                        </div>
+                        <div class="skills-grid">
+                          @for (skill of group.skills; track skill.id) {
+                            <button type="button" class="skill-pill font-hermione" [class.selected]="isSkillSelected(skill.id)" (click)="toggleSkill(skill.id)">
+                              <span class="skill-name font-maglite">{{ skill.name }}</span>
+                              @if (isSkillSelected(skill.id)) {
+                                <span class="skill-check">✓</span>
+                              }
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+
               <div class="form-row">
                 <label class="form-field">
                   <span class="label font-hermione">Bio</span>
