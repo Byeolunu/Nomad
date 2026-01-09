@@ -47,35 +47,4 @@ Server → Data Import -> Import from self-contained file
  **C'EST BON ! La base est importée !**
 
 ---
-
-## Vérifier que tout fonctionne
-
-### Dans SQL Workbench:
-
-**Exécutez cette commande:**
-
-```sql
-USE nomad;
-SHOW TABLES;
-```
-
-**Résultat attendu:**
-```
-applications
-contracts
-educations
-freelancers
-freelancers_skills
-missions
-missions_required_skills
-portfolios
-profiles
-profiles_skills
-recruiters
-reviews
-skills
-users
-work_experiences
-```
-
-**Et voila**.
+.
