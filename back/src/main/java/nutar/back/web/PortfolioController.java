@@ -21,17 +21,13 @@ public class PortfolioController {
 
     @GetMapping("/freelancer/{freelancerId}")
     public ResponseEntity<List<Portfolio>> getByFreelancer(@PathVariable Long freelancerId) {
-        System.out.println("DEBUG: Getting portfolios for freelancer: " + freelancerId);
         List<Portfolio> items = portfolioService.getPortfoliosByFreelancer(freelancerId);
-        System.out.println("DEBUG: Found " + items.size() + " portfolio items");
         return ResponseEntity.ok(items);
     }
 
     @PostMapping("/freelancer/{freelancerId}")
     @Transactional
     public ResponseEntity<?> addPortfolio(@PathVariable Long freelancerId, @RequestBody Portfolio portfolio) {
-        System.out.println("DEBUG: Adding portfolio for freelancer: " + freelancerId);
-        System.out.println("DEBUG: Portfolio data: " + portfolio.getTitle());
         try {
             Portfolio saved = portfolioService.createPortfolio(freelancerId, portfolio);
             System.out.println("DEBUG: Portfolio saved with ID: " + saved.getId());

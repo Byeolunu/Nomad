@@ -50,15 +50,12 @@ public class ApplicationController {
         Map<String, Object> response = new HashMap<>();
         try {
             String email = authentication.getName();
-            System.out.println("DEBUG: Applying for mission " + missionId + " with email: " + email);
 
             Freelancer freelancer = freelancerRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Freelancer not found"));
-            System.out.println("DEBUG: Found freelancer with ID: " + freelancer.getId());
 
             Mission mission = missionRepository.findById(missionId)
                     .orElseThrow(() -> new RuntimeException("Mission not found"));
-            System.out.println("DEBUG: Found mission with ID: " + mission.getId());
 
             Application application = new Application();
             application.setFreelancer(freelancer);
@@ -74,14 +71,12 @@ public class ApplicationController {
             application.setUpdatedDate(LocalDateTime.now());
 
             Application savedApplication = applicationService.applyToMission(application);
-            System.out.println("DEBUG: Application saved with ID: " + savedApplication.getId());
 
             response.put("success", true);
             response.put("message", "Application submitted successfully");
             response.put("applicationId", savedApplication.getId());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println("DEBUG: Error applying for mission: " + e.getMessage());
             e.printStackTrace();
             response.put("success", false);
             response.put("message", "Failed to submit application: " + e.getMessage());
@@ -97,18 +92,12 @@ public class ApplicationController {
 
     @GetMapping("/freelancer/{freelancerId}")
     public ResponseEntity<List<Application>> getFreelancerApplications(@PathVariable Long freelancerId) {
-        System.out.println("DEBUG: Fetching applications for freelancer ID: " + freelancerId);
         List<Application> applications = applicationService.getFreelancerApplications(freelancerId);
-        System.out.println("DEBUG: Found " + applications.size() + " applications");
-        for (Application app : applications) {
-            System.out.println("DEBUG: Application ID: " + app.getId() + ", Mission: " + (app.getMission() != null ? app.getMission().getTitle() : "null"));
-        }
         return ResponseEntity.ok(applications);
     }
 
     @GetMapping("/test/{freelancerId}")
     public ResponseEntity<Map<String, Object>> testFreelancerApplications(@PathVariable Long freelancerId) {
-        System.out.println("TEST: Fetching test applications for freelancer ID: " + freelancerId);
         Map<String, Object> result = new HashMap<>();
         try {
             List<Application> applications = applicationService.getFreelancerApplications(freelancerId);
@@ -116,10 +105,8 @@ public class ApplicationController {
             result.put("freelancerId", freelancerId);
             result.put("applicationCount", applications.size());
             result.put("applications", applications);
-            System.out.println("TEST: Successfully retrieved " + applications.size() + " applications");
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            System.out.println("TEST: Error: " + e.getMessage());
             e.printStackTrace();
             result.put("success", false);
             result.put("error", e.getMessage());
@@ -129,7 +116,6 @@ public class ApplicationController {
 
     @GetMapping("/mission/{missionId}/proposals")
     public ResponseEntity<Map<String, Object>> getProposalsForMission(@PathVariable Long missionId) {
-        System.out.println("DEBUG: Fetching proposals for mission ID: " + missionId);
         Map<String, Object> result = new HashMap<>();
         try {
             List<Application> applications = applicationService.getApplicationsForMission(missionId);
@@ -150,10 +136,8 @@ public class ApplicationController {
                 proposal.put("appliedDate", app.getAppliedDate());
                 return proposal;
             }).toList());
-            System.out.println("DEBUG: Found " + applications.size() + " proposals");
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            System.out.println("DEBUG ERROR: " + e.getMessage());
             e.printStackTrace();
             result.put("success", false);
             result.put("error", e.getMessage());
@@ -163,18 +147,13 @@ public class ApplicationController {
 
     @PutMapping("/{applicationId}/accept")
     public ResponseEntity<Map<String, Object>> acceptProposal(@PathVariable Long applicationId) {
-        System.out.println("DEBUG: Accepting proposal with ID: " + applicationId);
         Map<String, Object> result = new HashMap<>();
         try {
-            // Get the application
             Application application = applicationRepository.findById(applicationId)
                     .orElseThrow(() -> new RuntimeException("Application not found"));
             
-            // Update application status to ACCEPTED
             Application updated = applicationService.updateApplicationStatus(applicationId, "ACCEPTED");
-            System.out.println("DEBUG: Proposal accepted");
             
-            // Create contract from the application
             Contract contract = new Contract();
             contract.setFreelancer(application.getFreelancer());
             contract.setMission(application.getMission());
@@ -186,7 +165,6 @@ public class ApplicationController {
             contract.setStartDate(LocalDateTime.now());
             
             Contract savedContract = contractService.createContract(contract);
-            System.out.println("DEBUG: Created contract with ID: " + savedContract.getId());
             
             result.put("success", true);
             result.put("message", "Proposal accepted successfully and contract registered");
@@ -195,7 +173,6 @@ public class ApplicationController {
             result.put("contractId", savedContract.getId());
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            System.out.println("DEBUG ERROR: " + e.getMessage());
             e.printStackTrace();
             result.put("success", false);
             result.put("error", e.getMessage());
@@ -205,7 +182,6 @@ public class ApplicationController {
 
     @PutMapping("/{applicationId}/reject")
     public ResponseEntity<Map<String, Object>> rejectProposal(@PathVariable Long applicationId) {
-        System.out.println("DEBUG: Rejecting proposal with ID: " + applicationId);
         Map<String, Object> result = new HashMap<>();
         try {
             Application updated = applicationService.updateApplicationStatus(applicationId, "REJECTED");
@@ -213,10 +189,8 @@ public class ApplicationController {
             result.put("message", "Proposal rejected successfully");
             result.put("applicationId", updated.getId());
             result.put("status", updated.getStatus());
-            System.out.println("DEBUG: Proposal rejected");
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            System.out.println("DEBUG ERROR: " + e.getMessage());
             e.printStackTrace();
             result.put("success", false);
             result.put("error", e.getMessage());
@@ -226,14 +200,10 @@ public class ApplicationController {
 
     @GetMapping("/freelancer/{freelancerId}/active-missions")
     public ResponseEntity<Map<String, Object>> getFreelancerActiveMissions(@PathVariable Long freelancerId) {
-        System.out.println("DEBUG: Fetching active missions for freelancer ID: " + freelancerId);
         Map<String, Object> result = new HashMap<>();
         try {
-            // Get all applications for this freelancer
             List<Application> allApplications = applicationRepository.findByFreelancerId(freelancerId);
-            System.out.println("DEBUG: Found " + allApplications.size() + " total applications for freelancer");
             
-            // Filter for ACCEPTED applications
             List<Application> acceptedApplications = allApplications.stream()
                     .filter(app -> {
                         System.out.println("DEBUG: Application ID: " + app.getId() + ", Status: " + app.getStatus());
@@ -241,13 +211,9 @@ public class ApplicationController {
                     })
                     .toList();
             
-            System.out.println("DEBUG: Found " + acceptedApplications.size() + " accepted applications");
-            
-            // Transform to mission data
             List<Map<String, Object>> missions = acceptedApplications.stream()
                     .filter(app -> {
                         if (app.getMission() == null) {
-                            System.out.println("DEBUG: Warning - application has null mission");
                             return false;
                         }
                         return true;
@@ -274,10 +240,8 @@ public class ApplicationController {
                             missionMap.put("appliedDate", app.getAppliedDate());
                             missionMap.put("acceptedDate", app.getUpdatedDate());
                             
-                            System.out.println("DEBUG: Transformed mission: " + mission.getTitle());
                             return missionMap;
                         } catch (Exception e) {
-                            System.out.println("DEBUG: Error transforming mission: " + e.getMessage());
                             e.printStackTrace();
                             return null;
                         }
@@ -288,22 +252,19 @@ public class ApplicationController {
             result.put("success", true);
             result.put("activeMissionsCount", missions.size());
             result.put("activeMissions", missions);
-            System.out.println("DEBUG: Returning " + missions.size() + " missions");
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            System.out.println("DEBUG ERROR in getFreelancerActiveMissions: " + e.getMessage());
             e.printStackTrace();
             result.put("success", false);
             result.put("error", e.getMessage());
             result.put("activeMissionsCount", 0);
             result.put("activeMissions", new ArrayList<>());
-            return ResponseEntity.ok(result); // Return 200 OK with error info, not 400
+            return ResponseEntity.ok(result); 
         }
     }
 
     @GetMapping("/debug/all")
     public ResponseEntity<Map<String, Object>> debugAllApplications() {
-        System.out.println("DEBUG: Fetching ALL applications in database");
         Map<String, Object> result = new HashMap<>();
         try {
             List<Application> allApps = applicationRepository.findAll();
@@ -322,7 +283,6 @@ public class ApplicationController {
             }).toList());
             return ResponseEntity.ok(result);
         } catch (Exception e) {
-            System.out.println("DEBUG ERROR: " + e.getMessage());
             e.printStackTrace();
             result.put("success", false);
             result.put("error", e.getMessage());

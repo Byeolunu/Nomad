@@ -95,7 +95,6 @@ public class AuthController {
                     .map(auth -> auth.getAuthority())
                     .orElse("FREELANCER");
             
-            // Get the user to retrieve ID
             var user = userRepository.findByEmail(request.getEmail()).orElse(null);
             Long userId = user != null ? user.getId() : null;
             
