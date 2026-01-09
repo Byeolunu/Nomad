@@ -12,9 +12,21 @@
   color: #FBD217;
   text-decoration: none;
   transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  height: 50px;
 }
-.logo:hover {
-  opacity: 0.9;
+
+.logo-img {
+  height: 50px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.logo:hover .logo-img {
+  transform: scale(1.05);
 }
 .nav-links {
   display: flex;
@@ -140,6 +152,10 @@
     display: none;
   }
   .logo {
-    font-size: 1.5rem;
+    height: 40px;
+  }
+  .logo-img {
+    height: 40px;
+    max-width: 120px;
   }
 }
